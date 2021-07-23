@@ -1,0 +1,8 @@
+
+// json rpc
+// crypto market watch
+// es6 vs node
+
+
+activate watch mode
+npx tsc -w

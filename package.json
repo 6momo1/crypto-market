@@ -1,0 +1,30 @@
+{
+  "name": "crypto-market",
+  "version": "1.0.0",
+  "description": "",
+  "main": "driver.js",
+  "dependencies": {
+    "@ethersproject/address": "^5.4.0",
+    "@ethersproject/contracts": "^5.4.0",
+    "@ethersproject/providers": "^5.4.1",
+    "@ethersproject/solidity": "^5.4.0",
+    "@uniswap/sdk": "^3.0.3",
+    "web3": "^1.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/6momo1/crypto-market.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/6momo1/crypto-market/issues"
+  },
+  "homepage": "https://github.com/6momo1/crypto-market#readme"
+}
