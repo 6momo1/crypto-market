@@ -34,7 +34,19 @@ console.log(`The chainId of mainnet is ${sdk_1.ChainId.MAINNET}.`);
 const daiAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 const mmAddress = '0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611';
 const DAI = new sdk_1.Token(sdk_1.ChainId.MAINNET, '0x6B175474E89094C44Da98b954EedeAC495271d0F', 18, 'DAI', 'Dai Stablecoin');
-const daiData = utils_1.getTokenData(daiAddress);
-const mmData = utils_1.getTokenData(mmAddress);
-console.log("dai Data:", daiData);
-console.log("mm Data:", mmData);
+let daiData;
+utils_1.getTokenData(daiAddress)
+    .then(res => {
+    daiData = res;
+    console.log("dai token data: ", res);
+});
+utils_1.getTokenData(mmAddress)
+    .then(res => {
+    daiData = res;
+    console.log("mm token data: ", res);
+});
+utils_1.getPairData(daiAddress)
+    .then(res => {
+    daiData = res;
+    console.log("DAI pair data", res);
+});

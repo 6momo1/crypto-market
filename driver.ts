@@ -29,8 +29,22 @@ const DAI = new Token(
   'Dai Stablecoin'
 )
 
+let daiData
+getTokenData(daiAddress)
+  .then( res => {
+    daiData = res
+    console.log("dai token data: ",res);
+})
 
-const daiData = getTokenData(daiAddress)
-const mmData =  getTokenData(mmAddress)
-console.log("dai Data:", daiData);
-console.log("mm Data:", mmData);
+getTokenData(mmAddress)
+  .then( res => {
+    daiData = res
+    console.log("mm token data: ",res);
+})
+
+
+getPairData(daiAddress)
+  .then( res => {
+    daiData = res
+    console.log("DAI pair data",res);
+})

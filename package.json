@@ -9,6 +9,7 @@
     "@ethersproject/providers": "^5.4.1",
     "@ethersproject/solidity": "^5.4.0",
     "@uniswap/sdk": "^3.0.3",
+    "axios": "^0.21.1",
     "web3": "^1.4.0"
   },
   "devDependencies": {
