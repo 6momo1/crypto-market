@@ -12,42 +12,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.fetchGraphqlData = void 0;
 const axios_1 = __importDefault(require("axios"));
-const daiEth = `{
-    swaps(first: 5, where: { pair: "0xa478c2975ab1ea89e8196811f51a7b7ade33eb11" } orderBy: timestamp, orderDirection: desc) {
-      transaction {
+function generateQuery(pairAddress, entries) {
+    const res = `{
+      swaps(first: ${entries}, where: { pair: "${pairAddress}" } orderBy: timestamp, orderDirection: desc) {
+        transaction {
+          id
+          timestamp
+        }
         id
-        timestamp
-      }
-      id
-      pair {
-        token0 {
-          id
-          symbol
+        pair {
+          token0 {
+            id
+            symbol
+          }
+          token1 {
+            id
+            symbol
+          }
         }
-        token1 {
-          id
-          symbol
-        }
+        amount0In
+        amount0Out
+        amount1In
+        amount1Out
+        amountUSD
+        to
       }
-      amount0In
-      amount0Out
-      amount1In
-      amount1Out
-      amountUSD
-      to
-    }
-}`;
-const fetchGraphqlData = (query) => __awaiter(void 0, void 0, void 0, function* () {
+  }`;
+    return res;
+}
+const fetchGraphqlData = (pairAddress, entries) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = generateQuery(pairAddress, entries);
+    console.log(query);
     try {
         const result = yield axios_1.default.post('https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2', {
             query: query
         });
-        console.log(result.data.data);
+        //   console.log(result.data.data);
+        return result.data.data;
     }
     catch (error) {
         console.log(error);
+        return error;
     }
 });
-console.log("Fetching...");
-fetchGraphqlData(daiEth);
+exports.fetchGraphqlData = fetchGraphqlData;
