@@ -28,3 +28,31 @@ export const LOAD_SWAPS = gql`
       }
   }
 `
+
+export const LOAD_SWAPS_MM = gql `
+{
+      swaps(first: 5, where: { pair: "0x84383fb05F610222430F69727aA638F8FdbF5Cc1" } orderBy: timestamp, orderDirection: desc) {
+        transaction {
+          id
+          timestamp
+        }
+        id
+        pair {
+          token0 {
+            id
+            symbol
+          }
+          token1 {
+            id
+            symbol
+          }
+        }
+        amount0In
+        amount0Out
+        amount1In
+        amount1Out
+        amountUSD
+        to
+      }
+  }
+`

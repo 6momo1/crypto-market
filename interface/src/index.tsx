@@ -3,12 +3,49 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.css';
+
+
+
+// import Apollo
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+  from,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import { useQuery } from '@apollo/client';
+
+
+
+
+
+const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message, path }) => {
+      alert(`Graphql error ${message}`);
+    });
+  }
+});
+
+
+const link = from([
+  errorLink,
+  new HttpLink({ uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2" }),
+]);
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: link,
+});
+
 
 ReactDOM.render(
   <React.StrictMode>
-
-    <App />
+    <ApolloProvider client={client}>
+        <App />
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

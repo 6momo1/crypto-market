@@ -24,8 +24,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const web3_1 = __importDefault(require("web3"));
 const sdk_1 = require("@uniswap/sdk");
+const utils_1 = require("./utils");
 const keys = __importStar(require("./keys.json"));
-const fetchData_1 = require("./fetchData");
 // variables
 const url = keys.ethURL;
 var web3 = new web3_1.default(url);
@@ -45,16 +45,21 @@ let daiData;
 //     daiData = res
 //     console.log("mm token data: ",res);
 // })
-// getPairData(daiAddress)
-//   .then( res => {
-//     daiData = res
-//     console.log("DAI pair data",res);
-// })
-const daiEthPair = "0xa478c2975ab1ea89e8196811f51a7b7ade33eb11";
-fetchData_1.fetchGraphqlData(daiEthPair, 10)
+utils_1.getPairData(daiAddress)
     .then(res => {
-    console.log(res);
-})
-    .catch(error => {
-    console.log(error);
+    daiData = res;
+    console.log("DAI pair data", res);
 });
+utils_1.getPairData(mmAddress)
+    .then(res => {
+    daiData = res;
+    console.log("MM pair data", res);
+});
+const daiEthPair = "0xa478c2975ab1ea89e8196811f51a7b7ade33eb11";
+// fetchGraphqlData(daiEthPair, 10)
+// .then( res => {
+//     console.log(res);
+// })
+// .catch( error => {
+//     console.log(error);
+// })

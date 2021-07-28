@@ -43,21 +43,29 @@ let daiData
 // })
 
 
-// getPairData(daiAddress)
-//   .then( res => {
-//     daiData = res
-//     console.log("DAI pair data",res);
-// })
+getPairData(daiAddress)
+  .then( res => {
+    daiData = res
+    console.log("DAI pair data",res);
+})
 
+getPairData(mmAddress)
+  .then( res => {
+    daiData = res
+    console.log("MM pair data",res);
+})
 
 
 const daiEthPair = "0xa478c2975ab1ea89e8196811f51a7b7ade33eb11"
 
-fetchGraphqlData(daiEthPair, 10)
-    .then( res => {
-        console.log(res);
-    })
-    .catch( error => {
-        console.log(error);
-        
-    })
+
+
+
+// fetchGraphqlData(daiEthPair, 10)
+// .then( res => {
+//     console.log(res);
+// })
+// .catch( error => {
+//     console.log(error);
+    
+// })

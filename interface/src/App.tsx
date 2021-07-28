@@ -1,66 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Col } from 'react-bootstrap';
 import './App.css';
-import Infotab from './components/Infotab';
 import Navbar from './components/Navbar';
 import { fetchGraphqlData } from './utils/fetchData';
-
-
-// import Apollo
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  HttpLink,
-  from,
-} from "@apollo/client";
-import { onError } from "@apollo/client/link/error";
 import GetSwaps from './components/GetSwaps';
-import { useQuery } from '@apollo/client';
-import { LOAD_SWAPS } from './GraphQL/Queries';
+import { LOAD_SWAPS, LOAD_SWAPS_MM } from './GraphQL/Queries';
+import DataTable from './components/DataTable'
 
 
+import { useQuery, gql } from '@apollo/client'
 
-const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-  if (graphQLErrors) {
-    graphQLErrors.map(({ message, path }) => {
-      alert(`Graphql error ${message}`);
-    });
-  }
-});
-
-
-const link = from([
-  errorLink,
-  new HttpLink({ uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2" }),
-]);
-
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: link,
-});
+interface Swap {
+"__typename": string,
+"transaction": string,
+"id": string,
+"pair": string,
+"amount0In": string,
+"amount0Out": string,
+"amount1In": string,
+"amount1Out": string,
+"amountUSD": string,
+"to": string
+}
 
 function App() {
 
-    const [pairAdrs, setPairAdrs] = useState("0xa478c2975ab1ea89e8196811f51a7b7ade33eb11")
+    const [pairAdrs, setPairAdrs] = useState("0xaA934346e4f74bC23e62153Ee964dF8B826694eF")
     const [count, setCount] = useState(5)
+    const [swaps, setSwaps] = useState<Swap[] | null | undefined >(null)
 
-    const {error, loading, data} = useQuery(LOAD_SWAPS)
+    // const { error, loading, data } = useQuery(LOAD_SWAPS)
+    const { error, loading, data } = useQuery(LOAD_SWAPS_MM)
 
     useEffect(() => {
-        console.log(data);
-     
+        
+        if (!error) {
+            // setSwaps(data["swaps"])
+            console.log(data);
+            
+        }
+
+
     }, [data])
 
-    function handleFetch(e:any) {
-        console.log("handle fetch called ");
-    }
 
   return (
-    <ApolloProvider client={client} >
 
         <div className="App">
             <Navbar></Navbar>
+            
 
             <label htmlFor="address">Pair Address:
                 <input type="text" placeholder=""/>
@@ -75,15 +62,14 @@ function App() {
                 count: {count} <br />
             </div>
 
-            <button onClick={handleFetch}>
+            <button >
                 fetch
             </button> 
 
-            <GetSwaps/>
+
+            <DataTable swaps={swaps}></DataTable>
 
         </div> 
-        
-    </ApolloProvider>
   );
 }
 
