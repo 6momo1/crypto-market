@@ -1,0 +1,13 @@
+
+// json rpc
+// crypto market watch
+// es6 vs node
+
+
+activate watch mode
+npx tsc -w
+
+things I need to query
+
+token pair address
+display list
