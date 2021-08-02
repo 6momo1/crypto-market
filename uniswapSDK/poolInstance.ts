@@ -19,6 +19,7 @@ const poolContract = new ethers.Contract(
   provider
 );
 
+// pool interface
 interface Immutables {
     factory: string;
     token0: string;
@@ -27,8 +28,8 @@ interface Immutables {
     tickSpacing: number;
     maxLiquidityPerTick: ethers.BigNumber;
   }
-  
-  interface State {
+
+interface State {
     liquidity: ethers.BigNumber;
     sqrtPriceX96: ethers.BigNumber;
     tick: number;
@@ -37,7 +38,7 @@ interface Immutables {
     observationCardinalityNext: number;
     feeProtocol: number;
     unlocked: boolean;
-  }
+}
 
 // fetch data function
 async function getPoolImmutables() {
@@ -69,7 +70,7 @@ async function getPoolState() {
 }
 
 // call all functions
-async function main() {
+async function main(): Promise<void> {
   const immutables = await getPoolImmutables();
   const state = await getPoolState();
   const TokenA = new Token(1, immutables.token0, 6, "USDC", "USD Coin");
