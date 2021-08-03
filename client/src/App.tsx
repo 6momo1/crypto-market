@@ -3,7 +3,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import { fetchGraphqlData } from './utils/fetchData';
 import GetSwaps from './components/GetSwaps';
-import { LOAD_SWAPS } from './GraphQL/Queries';
+import { LOAD_DAI_ETH } from './GraphQL/Queries';
 import DataTable from './components/DataTable'
 import { Swap } from './Interfaces'
 
@@ -18,7 +18,7 @@ function App() {
     const [swaps, setSwaps] = useState<Swap[] | undefined >([])
 
     // const { error, loading, data } = useQuery(LOAD_SWAPS)
-    const { error, loading, data } = useQuery(LOAD_SWAPS)
+    const { error, loading, data } = useQuery(LOAD_DAI_ETH)
 
     useEffect(() => {
         
