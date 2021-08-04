@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
-import { Swap } from '../Interfaces'
+import { Swap } from '../interfaces'
 
 
 

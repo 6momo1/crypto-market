@@ -17,3 +17,19 @@ export interface Swap {
 "to": string
 }
 
+export interface BasicData {
+  token0?: {
+    id: string
+    name: string
+    symbol: string
+  }
+  token1?: {
+    id: string
+    name: string
+    symbol: string
+  }
+}
+
+export interface QueryResult {
+    data: []
+}

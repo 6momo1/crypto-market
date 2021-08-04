@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Navbar from './components/Navbar';
-import { fetchGraphqlData } from './utils/fetchData';
-import GetSwaps from './components/GetSwaps';
 import { LOAD_DAI_ETH } from './GraphQL/Queries';
 import DataTable from './components/DataTable'
-import { Swap } from './Interfaces'
-
+import { Swap } from './interfaces'
+import { Search } from './components/Search'
 import { useQuery, gql } from '@apollo/client'
 
 
@@ -33,7 +30,6 @@ function App() {
   return (
 
         <div className="App">
-            <Navbar></Navbar>
             
 
             <label htmlFor="address">Pair Address:
@@ -44,6 +40,9 @@ function App() {
                 count:
                 <input type="text" name="count" id="" onChange={e => setCount(parseInt(e.target.value))}/>
             </label>
+
+            <Search></Search>
+
             <div>
                 pair address: {pairAdrs} <br />
                 count: {count} <br />
