@@ -60,12 +60,9 @@ const DataTable: React.FC <Props> = ({ swaps }) => {
 
   useEffect(() => {
       
-    console.log(swaps);
 
     if (swaps) {
-        console.log("swaps loaded");
     }
-    
   }, [swaps])
 
   return (
