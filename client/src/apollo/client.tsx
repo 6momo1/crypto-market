@@ -1,11 +1,30 @@
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
-
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 export const client = new ApolloClient({
-  link: new HttpLink({
-    uri: 'https://api.thegraph.com/subgraphs/name/ianlapham/uniswapv2',
+  uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3',
+  cache: new InMemoryCache({
+    typePolicies: {
+      Token: {
+        // Singleton types that have no identifying field can use an empty
+        // array for their keyFields.
+        keyFields: false,
+      },
+      Pool: {
+        // Singleton types that have no identifying field can use an empty
+        // array for their keyFields.
+        keyFields: false,
+      },
+    },
   }),
-  cache: new InMemoryCache()
+  queryDeduplication: true,
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'no-cache',
+    },
+    query: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    },
+  },
 })
+

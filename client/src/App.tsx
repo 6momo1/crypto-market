@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { LOAD_DAI_ETH } from './GraphQL/Queries';
 import DataTable from './components/DataTable'
-import { Swap } from './interfaces'
 import { Search } from './components/Search'
 import { useQuery, gql } from '@apollo/client'
 
@@ -12,20 +10,9 @@ function App() {
 
     const [pairAdrs, setPairAdrs] = useState("0xa478c2975ab1ea89e8196811f51a7b7ade33eb11")
     const [count, setCount] = useState(5)
-    const [swaps, setSwaps] = useState<Swap[] | undefined >([])
+    const [swaps, setSwaps] = useState< any | undefined >([])
 
     // const { error, loading, data } = useQuery(LOAD_SWAPS)
-    const { error, loading, data } = useQuery(LOAD_DAI_ETH)
-
-    useEffect(() => {
-        
-        if (!error && !loading) {
-            setSwaps(data["swaps"])
-            console.log("data fetched");   
-        }
-
-    }, [data])
-
 
   return (
 
