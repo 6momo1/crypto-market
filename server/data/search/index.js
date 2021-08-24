@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchSearchResults = exports.POOL_SEARCH = exports.TOKEN_SEARCH = void 0;
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
-const apollo_1 = require("../apollo");
+const apollo_1 = require("../../apollo");
 exports.TOKEN_SEARCH = graphql_tag_1.default `
   query tokens($value: String, $id: String) {
     asSymbol: tokens(

@@ -1,6 +1,10 @@
 import { EthereumNetworkInfo } from "../constants/networks"
 import gql from 'graphql-tag'
 import ApolloClient from "apollo-client"
+import { useBlocksFromTimestamps } from "./useBlocksFromTimestamps"
+import { useDeltaTimestamps } from "../utils/queries"
+import { client } from "../apollo"
+
 export interface EthPrices {
   current: number
   oneDay: number
@@ -23,7 +27,6 @@ interface PricesResponse {
   }[]
 }
 
-
 export const ETH_PRICES = gql`
   query prices($block24: Int!, $block48: Int!, $blockWeek: Int!) {
     current: bundles(first: 1, subgraphError: allow) {
@@ -40,12 +43,13 @@ export const ETH_PRICES = gql`
     }
   }
 `
-async function fetchEthPrices(
+
+export async function fetchEthPrices(
   blocks: [number, number, number],
   client: ApolloClient<any>
 ): Promise<{ data: EthPrices | undefined; error: boolean }> {
   try {
-    const { data, error } = await client.query<PricesResponse>({
+    const {data, loading } = await client.query<any>({
       query: ETH_PRICES,
       variables: {
         block24: blocks[0],
@@ -53,13 +57,8 @@ async function fetchEthPrices(
         blockWeek: blocks[2] ?? 1,
       },
     })
-
-    if (error) {
-      return {
-        error: true,
-        data: undefined,
-      }
-    } else if (data) {
+    
+    if (data) {
       return {
         data: {
           current: parseFloat(data.current[0].ethPriceUSD ?? 0),
@@ -89,37 +88,51 @@ async function fetchEthPrices(
 /**
  * returns eth prices at current, 24h, 48h, and 1w intervals
  */
-export function useEthPrices(): EthPrices | undefined {
-  const [prices, setPrices] = useState<{ [network: string]: EthPrices | undefined }>()
-  const [error, setError] = useState(false)
-  const { dataClient } = useClients()
+export async function useEthPrices(): Promise<EthPrices | undefined> {
+  let prices: { [network: string]: EthPrices | undefined };
+
+  let error = false
+  let blocks
+  const dataClient = client 
 
   const [t24, t48, tWeek] = useDeltaTimestamps()
-  const { blocks, error: blockError } = useBlocksFromTimestamps([t24, t48, tWeek])
+
+  await useBlocksFromTimestamps([t24, t48, tWeek])
+  .then(({blocks, error}) => {
+    blocks = blocks
+    error = error
+  })
+
+  console.log(" t24, t48, tWeek: ",t24, t48, tWeek)
+  console.log("BLOCKS: ", blocks, error);
+  
 
   // index on active network
-  const [EthereumNetworkInfo] = useActiveNetworkVersion()
   const indexedPrices = prices?.[EthereumNetworkInfo.id]
 
-  const formattedBlocks = useMemo(() => {
+  const formattedBlocks = () => {
     if (blocks) {
       return blocks.map((b) => parseFloat(b.number))
     }
-    return undefined
-  }, [blocks])
-
-    async function fetch() {
-        const { data, error } = await fetchEthPrices(formattedBlocks as [number, number, number], dataClient)
-        if (error || blockError) {
-        setError(true)
-        } else if (data) {
-        setPrices({
-            [EthereumNetworkInfo.id]: data,
-        })
-        }
-    }
-
-  fetch()
+    else return undefined
+  }
+  console.log("FORMATTEDBLOCKS: ", formattedBlocks());
+  
+  
+  async function fetch() {
+      let { data, error } = await fetchEthPrices(formattedBlocks() as [number, number, number], dataClient)
+      if (error || blockError) {
+      error = true
+      } else if (data) {
+      prices = ({
+          [EthereumNetworkInfo.id]: data,
+      })
+      }
+  }
+  // if (!indexedPrices && !error && formattedBlocks) {
+  //     fetch()
+  // }
+  await fetch()
 
   return prices?.[EthereumNetworkInfo.id]
 }
