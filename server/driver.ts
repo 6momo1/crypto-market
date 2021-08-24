@@ -1,4 +1,4 @@
-import { fetchSearchResults } from "./search";
+import { fetchSearchResults } from "./data/search";
 
 
 const res = fetchSearchResults("ETH")

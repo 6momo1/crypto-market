@@ -1,7 +1,7 @@
 
 import gql from 'graphql-tag'
-import { client } from '../apollo'
-import { escapeRegExp } from '../utils'
+import { client } from '../../apollo'
+import { escapeRegExp } from '../../utils'
 // fetch data based on search input
 
 
