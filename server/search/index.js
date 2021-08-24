@@ -94,36 +94,43 @@ exports.POOL_SEARCH = graphql_tag_1.default `
   }
 `;
 function fetchSearchResults(value) {
-    function fetch() {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const tokens = yield apollo_1.client.query({
-                    query: exports.TOKEN_SEARCH,
-                    variables: {
-                        value: value ? value.toUpperCase() : '',
-                        id: value,
-                    },
-                });
-                const pools = yield apollo_1.client.query({
-                    query: exports.POOL_SEARCH,
-                    variables: {
-                        tokens: (_a = tokens.data.asSymbol) === null || _a === void 0 ? void 0 : _a.map((t) => t.id),
-                        id: value,
-                    },
-                });
-                if (tokens.data) {
-                    console.log("TOKENS: ", tokens.data);
+    return __awaiter(this, void 0, void 0, function* () {
+        let tokensFetched = null;
+        let poolsFetched = null;
+        function fetch() {
+            var _a;
+            return __awaiter(this, void 0, void 0, function* () {
+                try {
+                    const tokens = yield apollo_1.client.query({
+                        query: exports.TOKEN_SEARCH,
+                        variables: {
+                            value: value ? value.toUpperCase() : '',
+                            id: value,
+                        },
+                    });
+                    const pools = yield apollo_1.client.query({
+                        query: exports.POOL_SEARCH,
+                        variables: {
+                            tokens: (_a = tokens.data.asSymbol) === null || _a === void 0 ? void 0 : _a.map((t) => t.id),
+                            id: value,
+                        },
+                    });
+                    if (tokens.data) {
+                        tokensFetched = tokens.data;
+                    }
+                    if (pools.data) {
+                        poolsFetched = pools.data;
+                    }
                 }
-                if (pools.data) {
-                    console.log("POOLS: ", pools.data);
+                catch (e) {
+                    console.log(e);
                 }
-            }
-            catch (e) {
-                console.log(e);
-            }
-        });
-    }
-    fetch();
+            });
+        }
+        if (value && value.length > 0) {
+            yield fetch();
+        }
+        return { tokenRes: tokensFetched, PoolRes: poolsFetched };
+    });
 }
 exports.fetchSearchResults = fetchSearchResults;

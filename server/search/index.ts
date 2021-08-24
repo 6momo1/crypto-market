@@ -1,7 +1,14 @@
 
 import gql from 'graphql-tag'
 import { client } from '../apollo'
+import { escapeRegExp } from '../utils'
 // fetch data based on search input
+
+
+interface tokenSearchRes {
+  TokenRes: TokenRes | undefined,
+  PoolRes: PoolRes | undefined 
+}
 
 interface TokenRes {
   asSymbol: {
@@ -126,36 +133,52 @@ export const POOL_SEARCH = gql`
   }
 `
 
-export function fetchSearchResults( value: string ) {
+export async function fetchSearchResults( 
+  value: string 
+): 
+Promise<{
+  tokenRes: TokenRes | undefined, 
+  PoolRes: PoolRes | undefined
+}> {
 
-    async function fetch() {
-        try {
-            const tokens = await client.query({
-            query: TOKEN_SEARCH,
-            variables: {
-                value: value ? value.toUpperCase() : '',
-                id: value,
-            },
-            })
-            const pools = await client.query({
-            query: POOL_SEARCH,
-            variables: {
-                tokens: tokens.data.asSymbol?.map((t) => t.id),
-                id: value,
-            },
-            })
+  let tokensFetched: TokenRes = null
+  let poolsFetched: PoolRes = null
 
-            if (tokens.data) {
-            console.log("TOKENS: ",tokens.data);
-            }
-            if (pools.data) {
-                console.log("POOLS: ",pools.data);
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    }
+  async function fetch() {
+      try {
+          const tokens = await client.query({
+          query: TOKEN_SEARCH,
+          variables: {
+              value: value ? value.toUpperCase() : '',
+              id: value,
+          },
+          })
+          const pools = await client.query({
+          query: POOL_SEARCH,
+          variables: {
+              tokens: tokens.data.asSymbol?.map((t) => t.id),
+              id: value,
+          },
+          })
 
-    fetch()
+          if (tokens.data) {
+            tokensFetched = tokens.data
+            
+          }
+          if (pools.data) {
+              poolsFetched = pools.data
+
+          }
+      } catch (e) {
+          console.log(e)
+      }
+  }
+
+  if (value && value.length > 0) {
+    await fetch()
+  }
+
+
+  return {tokenRes: tokensFetched, PoolRes: poolsFetched}
 
 }
