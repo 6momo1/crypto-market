@@ -1,14 +1,7 @@
 
+import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
-import { client } from '../../apollo'
 import { escapeRegExp } from '../../utils'
-// fetch data based on search input
-
-
-interface tokenSearchRes {
-  TokenRes: TokenRes | undefined,
-  PoolRes: PoolRes | undefined 
-}
 
 interface TokenRes {
   asSymbol: {
@@ -51,7 +44,6 @@ interface PoolRes {
   as1: PoolResFields[]
   asAddress: PoolResFields[]
 }
-
 
 export const TOKEN_SEARCH = gql`
   query tokens($value: String, $id: String) {
@@ -133,8 +125,10 @@ export const POOL_SEARCH = gql`
   }
 `
 
+// fetch data based on search input
 export async function fetchSearchResults( 
-  value: string 
+  value: string,
+  client: ApolloClient<any>
 ): 
 Promise<{
   tokenRes: TokenRes | undefined, 
@@ -177,7 +171,6 @@ Promise<{
   if (value && value.length > 0) {
     await fetch()
   }
-
 
   return {tokenRes: tokensFetched, PoolRes: poolsFetched}
 

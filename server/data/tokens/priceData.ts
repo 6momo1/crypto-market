@@ -3,6 +3,7 @@ import utc from 'dayjs/plugin/utc'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import gql from 'graphql-tag'
 import ApolloClient from 'apollo-client'
+import { ONE_HOUR_SECONDS, TimeWindow } from '../../constants/intervals'
 
 /**
  * Formatted type for Candlestick charts
@@ -114,8 +115,11 @@ export async function fetchTokenPriceData(
       open: string
       close: string
     }[] = []
+
     let skip = 0
     let allFound = false
+    let error = false
+
     while (!allFound) {
       const { data: priceData, errors, loading } = await dataClient.query<PriceResults>({
         query: PRICE_CHART,
@@ -135,6 +139,9 @@ export async function fetchTokenPriceData(
           data = data.concat(priceData.tokenHourDatas)
         }
       }
+      if (errors) {
+        error = true
+      }
     }
 
     const formattedHistory = data.map((d) => {
@@ -149,7 +156,7 @@ export async function fetchTokenPriceData(
 
     return {
       data: formattedHistory,
-      error: false,
+      error
     }
   } catch (e) {
     console.log(e)
@@ -160,3 +167,25 @@ export async function fetchTokenPriceData(
   }
 }
 
+
+// fetch token price data
+export async function useFetchTokenPriceData(
+    address: string,
+    client: ApolloClient<any>
+):
+Promise<{
+    data: PriceChartEntry[],
+    error: boolean
+}>
+{
+    const timeWindow = TimeWindow.WEEK
+    const utcCurrentTime = dayjs()
+    const startTimestamp = utcCurrentTime.subtract(1, timeWindow).startOf('hour').unix()
+    const { data, error } = await fetchTokenPriceData(
+        address,
+        ONE_HOUR_SECONDS, 
+        startTimestamp, 
+        client,
+    )
+    return {data, error}
+}

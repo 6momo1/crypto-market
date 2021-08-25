@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchSearchResults = exports.POOL_SEARCH = exports.TOKEN_SEARCH = void 0;
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
-const apollo_1 = require("../../apollo");
 exports.TOKEN_SEARCH = graphql_tag_1.default `
   query tokens($value: String, $id: String) {
     asSymbol: tokens(
@@ -93,7 +92,8 @@ exports.POOL_SEARCH = graphql_tag_1.default `
     }
   }
 `;
-function fetchSearchResults(value) {
+// fetch data based on search input
+function fetchSearchResults(value, client) {
     return __awaiter(this, void 0, void 0, function* () {
         let tokensFetched = null;
         let poolsFetched = null;
@@ -101,14 +101,14 @@ function fetchSearchResults(value) {
             var _a;
             return __awaiter(this, void 0, void 0, function* () {
                 try {
-                    const tokens = yield apollo_1.client.query({
+                    const tokens = yield client.query({
                         query: exports.TOKEN_SEARCH,
                         variables: {
                             value: value ? value.toUpperCase() : '',
                             id: value,
                         },
                     });
-                    const pools = yield apollo_1.client.query({
+                    const pools = yield client.query({
                         query: exports.POOL_SEARCH,
                         variables: {
                             tokens: (_a = tokens.data.asSymbol) === null || _a === void 0 ? void 0 : _a.map((t) => t.id),

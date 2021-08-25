@@ -1,9 +1,6 @@
 import gql from 'graphql-tag'
-import { client } from '../../apollo'
-import { get2DayChange, getPercentChange } from '../../utils'
-import { useDeltaTimestamps } from '../../utils/queries'
-import { formatTokenName, formatTokenSymbol } from '../../utils/tokens'
-import { useQuery } from '@apollo/client'
+import ApolloClient from 'apollo-client'
+
 export type TokenData = {
   // token is in some pool on uniswap
   exists: boolean
@@ -31,7 +28,6 @@ export type TokenData = {
   priceUSDChange: number
   priceUSDChangeWeek: number
 }
-
 
 export const TOKENS_BULK = (block: number | undefined, tokens: string[]) => {
   let tokenString = `[`
@@ -85,7 +81,8 @@ interface TokenDataResponse {
  * Fetch top addresses by volume
  */
 export async function useFetchedTokenDatas(
-  tokenAddresses: string[]
+  tokenAddresses: string[],
+  client: ApolloClient<any>
 ): 
 Promise<{
   data:

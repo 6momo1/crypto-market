@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useFetchedTokenDatas = exports.TOKENS_BULK = void 0;
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
-const apollo_1 = require("../../apollo");
 const TOKENS_BULK = (block, tokens) => {
     let tokenString = `[`;
     tokens.map((address) => {
@@ -45,10 +44,10 @@ exports.TOKENS_BULK = TOKENS_BULK;
 /**
  * Fetch top addresses by volume
  */
-function useFetchedTokenDatas(tokenAddresses) {
+function useFetchedTokenDatas(tokenAddresses, client) {
     return __awaiter(this, void 0, void 0, function* () {
         let data;
-        yield apollo_1.client.query({ query: exports.TOKENS_BULK(undefined, tokenAddresses) })
+        yield client.query({ query: exports.TOKENS_BULK(undefined, tokenAddresses) })
             .then((res) => {
             data = res.data;
         });

@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchTokenPriceData = exports.PRICES_BY_BLOCK = void 0;
+exports.useFetchTokenPriceData = exports.fetchTokenPriceData = exports.PRICES_BY_BLOCK = void 0;
 const dayjs_1 = __importDefault(require("dayjs"));
 const utc_1 = __importDefault(require("dayjs/plugin/utc"));
 const weekOfYear_1 = __importDefault(require("dayjs/plugin/weekOfYear"));
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
+const intervals_1 = require("../../constants/intervals");
 // format dayjs with the libraries that we need
 dayjs_1.default.extend(utc_1.default);
 dayjs_1.default.extend(weekOfYear_1.default);
@@ -83,6 +84,7 @@ function fetchTokenPriceData(address, interval, startTimestamp, dataClient) {
             let data = [];
             let skip = 0;
             let allFound = false;
+            let error = false;
             while (!allFound) {
                 const { data: priceData, errors, loading } = yield dataClient.query({
                     query: PRICE_CHART,
@@ -102,6 +104,9 @@ function fetchTokenPriceData(address, interval, startTimestamp, dataClient) {
                         data = data.concat(priceData.tokenHourDatas);
                     }
                 }
+                if (errors) {
+                    error = true;
+                }
             }
             const formattedHistory = data.map((d) => {
                 return {
@@ -114,7 +119,7 @@ function fetchTokenPriceData(address, interval, startTimestamp, dataClient) {
             });
             return {
                 data: formattedHistory,
-                error: false,
+                error
             };
         }
         catch (e) {
@@ -127,3 +132,14 @@ function fetchTokenPriceData(address, interval, startTimestamp, dataClient) {
     });
 }
 exports.fetchTokenPriceData = fetchTokenPriceData;
+// fetch token price data
+function useFetchTokenPriceData(address, client) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const timeWindow = intervals_1.TimeWindow.WEEK;
+        const utcCurrentTime = dayjs_1.default();
+        const startTimestamp = utcCurrentTime.subtract(1, timeWindow).startOf('hour').unix();
+        const { data, error } = yield fetchTokenPriceData(address, intervals_1.ONE_HOUR_SECONDS, startTimestamp, client);
+        return { data, error };
+    });
+}
+exports.useFetchTokenPriceData = useFetchTokenPriceData;
