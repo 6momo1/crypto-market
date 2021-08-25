@@ -35,7 +35,7 @@ function fetchTokenTransactionTest() {
     });
 }
 // fetch token data
-function fetchTokenDataTest() {
+function fetchTokenDatasTest() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("FETCHING TOKEN DATA");
         yield tokenData_1.useFetchedTokenDatas(["0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611"], apollo_1.client)
@@ -86,8 +86,8 @@ function fetchTokenChartDataTest() {
     });
 }
 // fetchTokenTransactionTest()
-// fetchTokenDataTest()
-// addressPriceDataTest()
+// fetchTokenDatasTest()
+addressPriceDataTest();
 // searchTokenTest()
 // useTopTokenAddressesTest()
 // fetchPoolsForTokenTest()

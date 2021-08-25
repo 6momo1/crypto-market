@@ -1,28 +1,20 @@
 
-// json rpc
-// crypto market watch
-// es6 vs node
-
-
-activate watch mode
-npx tsc -w
-
-things I need to query
-
-token pair address
-display list
-
-
 SCHEMAS:
 
 allow watching for each token or for each user?
-users: [
+
+EXAMPLE:
+users: {
     "Bill": {
         tokenWatchlist: [
             "ETH": {
                 priceAlert: 3000.00
             }
-        ]
+        ],
+        notificationService: [
+            "email": "bill@gmail.com",
+            "telegram": "billy123"
+        ],
         member: true
     },
     "Grace": {
@@ -33,9 +25,13 @@ users: [
             "WBTC": {
                 priceAlert: 50000.00
             }
-        ]
+        ],
+        notificationService: [
+            "email": "grace@gmail.com",
+        ],
+        member: true
     }
-]
+}
 
 EXTERNAL:
 tokenAlerts: [
@@ -45,7 +41,7 @@ tokenAlerts: [
             "name": 
             "symbol": 
         },
-        subscriber: [
+        subscribers: [
             "Bill",
             "Grace"
         ]
@@ -56,7 +52,7 @@ tokenAlerts: [
             "name": 
             "symbol": 
         },
-        subscriber: [
+        subscribers: [
             "Grace"
         ]
 ]
@@ -79,10 +75,3 @@ tokenData (statics) {
     "name": 
     "symbol": 
 }
-
-
-
-schema
-host on discord bot
-email
-telegram

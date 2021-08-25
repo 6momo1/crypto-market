@@ -28,7 +28,7 @@ async function fetchTokenTransactionTest() {
 }
 
 // fetch token data
-async function fetchTokenDataTest() {
+async function fetchTokenDatasTest() {
     console.log("FETCHING TOKEN DATA");
     await useFetchedTokenDatas(["0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611"], client)
     .then(console.log)
@@ -75,8 +75,8 @@ async function fetchTokenChartDataTest() {
 }
 
 // fetchTokenTransactionTest()
-// fetchTokenDataTest()
-// addressPriceDataTest()
+// fetchTokenDatasTest()
+addressPriceDataTest()
 // searchTokenTest()
 // useTopTokenAddressesTest()
 // fetchPoolsForTokenTest()
