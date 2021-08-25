@@ -11,3 +11,7 @@ things I need to query
 
 token pair address
 display list
+
+
+
+schema
