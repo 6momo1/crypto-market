@@ -8,7 +8,15 @@ users: {
     "Bill": {
         tokenWatchlist: [
             "ETH": {
-                priceAlert: 3000.00
+                priceAlert: {
+                    above: [
+                        3000.00,
+                        3200.00
+                    ],
+                    below: [
+                        2900.00
+                    ]
+                }
             }
         ],
         notificationService: [
@@ -20,10 +28,19 @@ users: {
     "Grace": {
         tokenWatchlist: [
             "ETH": {
-                priceAlert: 2900.00
+                priceAlert: {
+                    above: [
+                        2900.00
+                    ],
+                    below: []
+                }
             }
             "WBTC": {
-                priceAlert: 50000.00
+                priceAlert: {
+                    above: [
+                        50000.00
+                    ],
+                    below: []
             }
         ],
         notificationService: [
@@ -67,7 +84,7 @@ tokenData {
     "totalValueLockedUSD":
     "txCount":
     "volume":
-    "volumeUSD:
+    "volumeUSD":
 }
 
 tokenData (statics) {

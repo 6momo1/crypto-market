@@ -5,11 +5,6 @@ import { client } from "./apollo";
 import web3 from "web3"
 import { useFetchTokenPriceData } from "./data/tokens/priceData"
 
-interface fetchTokenDatasPost {
-    addresses: string[]
-}
-
-
 const app = express()
 
 // Constants

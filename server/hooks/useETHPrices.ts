@@ -121,7 +121,7 @@ export async function useEthPrices(): Promise<EthPrices | undefined> {
   
   async function fetch() {
       let { data, error } = await fetchEthPrices(formattedBlocks() as [number, number, number], dataClient)
-      if (error || blockError) {
+      if (error) {
       error = true
       } else if (data) {
       prices = ({

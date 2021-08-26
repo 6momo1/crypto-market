@@ -5,6 +5,30 @@
 // below or above price
 
 
+function shouldAlertUser(subscriber, tokenSymbol, currentPrice ): boolean {
+
+    const pricesAbove = users[subscriber].tokenWatchlist[tokenSymbol].priceAlert.above
+    const pricesBelow = users[subscriber].tokenWatchlist[tokenSymbol].priceAlert.below
+    const alert: boolean = false
+
+    if (!pricesAbove && !pricesBelow) return false
+
+    pricesAbove.forEach( price => {
+        if (currentPrice >= price) {
+            return true
+        }
+    })
+
+    pricesBelow.forEach( price => {
+        if (currentPrice <= price) {
+            return true
+        }
+    })
+
+    return false
+}
+
+
 function PriceAction()
 it is called every minute
 
@@ -16,16 +40,17 @@ for each token in token Alerts:
     for each subscriber in subscribers:
 
         // check price meets subscriber price threshold
+        if (shouldAlertUser(subscriber, token, price)) {
 
+            users[subscriber].notificationService ForEach Key:
+                if key == email:
+                    email = users[subscriber].notificationService.email
+                    NotifyByEmail(email, price, token )
 
+                if key == telegram:
+                    telUsername = users[subscriber].notificationService.telegram
+                    NotifyByTelegram(telUsername, price, token )
 
-        users[subscriber].notificationService ForEach Key:
-            if key == email:
-                email = users[subscriber].notificationService.email
-                NotifyByEmail(email, price, token )
-
-            if key == telegram:
-                telUsername = users[subscriber].notificationService.telegram
-                NotifyByTelegram(telUsername, price, token )
+        }
 
 

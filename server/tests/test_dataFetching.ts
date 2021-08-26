@@ -1,11 +1,11 @@
-import { fetchSearchResults } from "./data/search";
-import { client } from "./apollo";
-import { useFetchedTokenDatas } from "./data/tokens/tokenData";
-import { useFetchTokenPriceData } from "./data/tokens/priceData";
-import { fetchTokenTransactions } from "./data/tokens/transactions"
-import { useTopTokenAddresses } from "./data/tokens/topTokens";
-import { fetchPoolsForToken } from "./data/tokens/poolsForToken";
-import { fetchTokenChartData } from "./data/tokens/chartData";
+import { fetchSearchResults } from "../data/search";
+import { client } from "../apollo";
+import { useFetchedTokenDatas } from "../data/tokens/tokenData";
+import { useFetchTokenPriceData } from "../data/tokens/priceData";
+import { fetchTokenTransactions } from "../data/tokens/transactions"
+import { useTopTokenAddresses } from "../data/tokens/topTokens";
+import { fetchPoolsForToken } from "../data/tokens/poolsForToken";
+import { fetchTokenChartData } from "../data/tokens/chartData";
 
 // // get current block number
 // const Web3 = require('Web3');
@@ -49,11 +49,16 @@ async function addressPriceDataTest() {
 // search for Token by symbol
 async function searchTokenTest() {
     console.log("SEARCHING FOR TOKEN SYMBOL")
-    await fetchSearchResults("MM", client)
-    .then(console.log)
-    .catch( error => {
-    console.log(error);
-    })
+
+    const res = await fetchSearchResults("ETH", client)
+    console.log(res.tokenRes.asSymbol[0]);
+    
+    const res2 = await fetchSearchResults("WBTC", client)
+    console.log(res2.tokenRes.asSymbol.slice(0,4));
+    // .then(console.log)
+    // .catch( error => {
+    // console.log(error);
+    // })
 }
 
 
@@ -76,8 +81,8 @@ async function fetchTokenChartDataTest() {
 
 // fetchTokenTransactionTest()
 // fetchTokenDatasTest()
-addressPriceDataTest()
-// searchTokenTest()
+// addressPriceDataTest()
+searchTokenTest()
 // useTopTokenAddressesTest()
 // fetchPoolsForTokenTest()
 // fetchTokenChartDataTest()

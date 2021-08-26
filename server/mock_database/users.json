@@ -1,0 +1,48 @@
+{
+  "clients": {
+      "Bill": {
+            "tokenWatchlist": {
+                "ETH": {
+                    "priceAlert": {
+                        "above": [
+                            3000.00,
+                            3200.00
+                        ],
+                        "below": [
+                            2900.00
+                        ]
+                    }
+                }
+            },
+            "notificationService": [
+                {"email": "bill@gmail.com"},
+                {"telegram": "billy123"}
+            ],
+            "member": true
+        },
+        "Grace": {
+            "tokenWatchlist": {
+                "ETH": {
+                    "priceAlert": {
+                        "above": [
+                            2900.00
+                        ],
+                        "below": []
+                    }
+                },
+                "WBTC": {
+                    "priceAlert": {
+                        "above": [
+                            50000.00
+                        ],
+                        "below": []
+                }
+            },
+            "notificationService": [
+                {"email": "grace@gmail.com"}
+            ],
+            "member": true
+        }
+    }
+}
+}

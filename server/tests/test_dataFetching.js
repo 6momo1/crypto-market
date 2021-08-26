@@ -9,14 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const search_1 = require("./data/search");
-const apollo_1 = require("./apollo");
-const tokenData_1 = require("./data/tokens/tokenData");
-const priceData_1 = require("./data/tokens/priceData");
-const transactions_1 = require("./data/tokens/transactions");
-const topTokens_1 = require("./data/tokens/topTokens");
-const poolsForToken_1 = require("./data/tokens/poolsForToken");
-const chartData_1 = require("./data/tokens/chartData");
+const search_1 = require("../data/search");
+const apollo_1 = require("../apollo");
+const tokenData_1 = require("../data/tokens/tokenData");
+const priceData_1 = require("../data/tokens/priceData");
+const transactions_1 = require("../data/tokens/transactions");
+const topTokens_1 = require("../data/tokens/topTokens");
+const poolsForToken_1 = require("../data/tokens/poolsForToken");
+const chartData_1 = require("../data/tokens/chartData");
 // // get current block number
 // const Web3 = require('Web3');
 // var web3 = new Web3('https://mainnet.infura.io/v3/9858506045b5436a83baed0be0a00714');
@@ -59,11 +59,14 @@ function addressPriceDataTest() {
 function searchTokenTest() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("SEARCHING FOR TOKEN SYMBOL");
-        yield search_1.fetchSearchResults("MM", apollo_1.client)
-            .then(console.log)
-            .catch(error => {
-            console.log(error);
-        });
+        const res = yield search_1.fetchSearchResults("ETH", apollo_1.client);
+        console.log(res.tokenRes.asSymbol[0]);
+        const res2 = yield search_1.fetchSearchResults("WBTC", apollo_1.client);
+        console.log(res2.tokenRes.asSymbol.slice(0, 4));
+        // .then(console.log)
+        // .catch( error => {
+        // console.log(error);
+        // })
     });
 }
 function useTopTokenAddressesTest() {
@@ -87,8 +90,8 @@ function fetchTokenChartDataTest() {
 }
 // fetchTokenTransactionTest()
 // fetchTokenDatasTest()
-addressPriceDataTest();
-// searchTokenTest()
+// addressPriceDataTest()
+searchTokenTest();
 // useTopTokenAddressesTest()
 // fetchPoolsForTokenTest()
 // fetchTokenChartDataTest()

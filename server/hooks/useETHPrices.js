@@ -104,7 +104,7 @@ function useEthPrices() {
         function fetch() {
             return __awaiter(this, void 0, void 0, function* () {
                 let { data, error } = yield fetchEthPrices(formattedBlocks(), dataClient);
-                if (error || blockError) {
+                if (error) {
                     error = true;
                 }
                 else if (data) {
