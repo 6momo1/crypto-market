@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useFetchTokenPriceData = exports.fetchTokenPriceData = exports.PRICES_BY_BLOCK = void 0;
+exports.useFetchTokenPriceData = exports.PRICES_BY_BLOCK = void 0;
 const dayjs_1 = __importDefault(require("dayjs"));
 const utc_1 = __importDefault(require("dayjs/plugin/utc"));
 const weekOfYear_1 = __importDefault(require("dayjs/plugin/weekOfYear"));
@@ -131,7 +131,6 @@ function fetchTokenPriceData(address, interval, startTimestamp, dataClient) {
         }
     });
 }
-exports.fetchTokenPriceData = fetchTokenPriceData;
 // fetch token price data
 function useFetchTokenPriceData(address, client) {
     return __awaiter(this, void 0, void 0, function* () {

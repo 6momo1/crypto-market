@@ -24,13 +24,19 @@ const chartData_1 = require("../data/tokens/chartData");
 // .then(num => {
 //     console.log(num)
 // });
+var tokenIds;
+(function (tokenIds) {
+    tokenIds["WETH"] = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+    tokenIds["WBTC"] = "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599";
+    tokenIds["MM"] = "0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611";
+})(tokenIds || (tokenIds = {}));
 // useEthPrices()
 // .then(res => console.log("driver: ", res));
 // fetch token transactions
 function fetchTokenTransactionTest() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("FETCHING TOKEN TRASACTIONS");
-        yield transactions_1.fetchTokenTransactions("0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611", apollo_1.client)
+        yield transactions_1.fetchTokenTransactions(tokenIds.MM, apollo_1.client)
             .then(console.log);
     });
 }
@@ -38,7 +44,7 @@ function fetchTokenTransactionTest() {
 function fetchTokenDatasTest() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("FETCHING TOKEN DATA");
-        yield tokenData_1.useFetchedTokenDatas(["0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611"], apollo_1.client)
+        yield tokenData_1.useFetchedTokenDatas([tokenIds.WETH, tokenIds.WBTC], apollo_1.client)
             .then(console.log)
             .catch(error => {
             console.log(error);
@@ -63,10 +69,6 @@ function searchTokenTest() {
         console.log(res.tokenRes.asSymbol[0]);
         const res2 = yield search_1.fetchSearchResults("WBTC", apollo_1.client);
         console.log(res2.tokenRes.asSymbol.slice(0, 4));
-        // .then(console.log)
-        // .catch( error => {
-        // console.log(error);
-        // })
     });
 }
 function useTopTokenAddressesTest() {
@@ -89,9 +91,9 @@ function fetchTokenChartDataTest() {
     });
 }
 // fetchTokenTransactionTest()
-// fetchTokenDatasTest()
+fetchTokenDatasTest();
 // addressPriceDataTest()
-searchTokenTest();
+// searchTokenTest()
 // useTopTokenAddressesTest()
 // fetchPoolsForTokenTest()
 // fetchTokenChartDataTest()

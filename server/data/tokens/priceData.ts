@@ -70,7 +70,7 @@ interface PriceResults {
   }[]
 }
 
-export async function fetchTokenPriceData(
+async function fetchTokenPriceData(
   address: string,
   interval: number,
   startTimestamp: number,

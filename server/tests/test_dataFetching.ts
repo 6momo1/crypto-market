@@ -15,6 +15,11 @@ import { fetchTokenChartData } from "../data/tokens/chartData";
 //     console.log(num)
 // });
 
+enum tokenIds {
+    WETH = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    WBTC = "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    MM = "0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611",
+}
 
 // useEthPrices()
 // .then(res => console.log("driver: ", res));
@@ -22,7 +27,7 @@ import { fetchTokenChartData } from "../data/tokens/chartData";
 // fetch token transactions
 async function fetchTokenTransactionTest() {
     console.log("FETCHING TOKEN TRASACTIONS");
-    await fetchTokenTransactions("0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611", client)
+    await fetchTokenTransactions(tokenIds.MM, client)
     .then(console.log)
 
 }
@@ -30,7 +35,7 @@ async function fetchTokenTransactionTest() {
 // fetch token data
 async function fetchTokenDatasTest() {
     console.log("FETCHING TOKEN DATA");
-    await useFetchedTokenDatas(["0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611"], client)
+    await useFetchedTokenDatas([tokenIds.WETH, tokenIds.WBTC], client)
     .then(console.log)
     .catch( error => {
         console.log(error);
@@ -55,10 +60,6 @@ async function searchTokenTest() {
     
     const res2 = await fetchSearchResults("WBTC", client)
     console.log(res2.tokenRes.asSymbol.slice(0,4));
-    // .then(console.log)
-    // .catch( error => {
-    // console.log(error);
-    // })
 }
 
 
@@ -80,9 +81,9 @@ async function fetchTokenChartDataTest() {
 }
 
 // fetchTokenTransactionTest()
-// fetchTokenDatasTest()
+fetchTokenDatasTest()
 // addressPriceDataTest()
-searchTokenTest()
+// searchTokenTest()
 // useTopTokenAddressesTest()
 // fetchPoolsForTokenTest()
 // fetchTokenChartDataTest()
