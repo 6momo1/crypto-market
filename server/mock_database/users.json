@@ -14,10 +14,12 @@
                     }
                 }
             },
-            "notificationServices": {
-                "email": "bill@gmail.com",
-                "telegram": "billy123"
+            "notifyBy": {
+                "email": true,
+                "telegram": true
             },
+            "email": "billy@gmail.com",
+            "telegram": "billy123",
             "member": true
         },
       "Grace": {
@@ -39,10 +41,12 @@
                     }
                 }
             },
-            "notificationServices": {
-                "email": "grace@gmail.com",
-                "telegram": ""
+            "notifyBy": {
+                "email": true,
+                "telegram": false
             },
+            "email": "grace@gmail.com",
+            "telegram": "",
             "member": true
         }
     }

@@ -22,6 +22,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendPriceAlertToAllUsers = void 0;
 const clients_json = __importStar(require("../../mock_database/users.json"));
 const tokenAlerts_json = __importStar(require("../../mock_database/tokenAlerts.json"));
+const notifyByServices_1 = require("./notifyByServices");
+// use mock database
 const tokenAlerts = tokenAlerts_json.tokenAlerts;
 const clients = clients_json.clients;
 /*
@@ -30,7 +32,7 @@ const clients = clients_json.clients;
 function shouldAlertUser(subscriber, tokenSymbol, currentPrice) {
     const pricesAbove = clients[subscriber].tokenWatchlist[tokenSymbol].priceAlert.above;
     const pricesBelow = clients[subscriber].tokenWatchlist[tokenSymbol].priceAlert.below;
-    // console.log(pricesAbove, pricesBelow);
+    // if user does not have any price targets, return
     if (!pricesAbove && !pricesBelow) {
         return {
             shouldAlert: false,
@@ -66,21 +68,8 @@ function shouldAlertUser(subscriber, tokenSymbol, currentPrice) {
         message: "Price targets not reached."
     };
 }
-function notifyByEmail(subscriber, email, tokenSymbol, price) {
-    console.log(`NOTIFIYING: ${subscriber} 
-        by Email: ${email} 
-        for token: ${tokenSymbol} 
-        at price ${price}
-    `);
-}
-function notifyByTelegram(subscriber, username, tokenSymbol, price) {
-    console.log(`NOTIFIYING: ${subscriber} 
-        by telegram username: ${username} 
-        for token: ${tokenSymbol} 
-        at price ${price}
-    `);
-}
 function sendPriceAlertToAllUsers(price, tokenSymbol, tokenData) {
+    // initate return objects for feedback
     const alertsSentTo = [];
     const alertsNotSentTo = [];
     // check if token exists
@@ -102,18 +91,18 @@ function sendPriceAlertToAllUsers(price, tokenSymbol, tokenData) {
             message: "There are no subscribers for the token: " + tokenSymbol + "."
         };
     }
+    // for each subscriber of a token, alert them by their desired notification
+    // service (email or telegram) if their price targets are reached.
     subscribers.forEach(subscriber => {
         const { shouldAlert, error, message } = shouldAlertUser(subscriber, tokenSymbol, price);
         if (shouldAlert) {
-            const clientEmail = clients[subscriber].notificationServices.email;
-            const clientTelegram = clients[subscriber].notificationServices.telegram;
-            console.log(clientEmail, clientTelegram);
-            if (clientEmail != "") {
-                notifyByEmail(subscriber, clientEmail, tokenSymbol, price);
+            const clientInfo = clients[subscriber];
+            if (clientInfo.notifyBy.email) {
+                notifyByServices_1.notifyByEmail(subscriber, clientInfo.email, tokenSymbol, price);
                 alertsSentTo.push({ name: subscriber, by: "email" });
             }
-            if (clientTelegram != "") {
-                notifyByTelegram(subscriber, clientTelegram, tokenSymbol, price);
+            if (clientInfo.notifyBy.telegram) {
+                notifyByServices_1.notifyByTelegram(subscriber, clientInfo.telegram, tokenSymbol, price);
                 alertsSentTo.push({ name: subscriber, by: "telegram" });
             }
         }

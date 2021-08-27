@@ -1,6 +1,7 @@
 import * as clients_json from '../../mock_database/users.json'
 import * as tokenAlerts_json from '../../mock_database/tokenAlerts.json'
-
+import { Client, TokenAlerts, TokenSubscribersInfo } from "../../mock_database/interfaces"
+import { notifyByEmail, notifyByTelegram } from './notifyByServices'
 
 interface TokenFields {
   id: string
@@ -15,9 +16,10 @@ interface TokenFields {
   totalValueLockedUSD: string
 }
 
-
+// use mock database
 const tokenAlerts = tokenAlerts_json.tokenAlerts
 const clients = clients_json.clients
+
 /*
     alert user if token price is either above or below the user's price target
 */
@@ -35,9 +37,7 @@ function shouldAlertUser(
     const pricesAbove = clients[subscriber].tokenWatchlist[tokenSymbol].priceAlert.above
     const pricesBelow = clients[subscriber].tokenWatchlist[tokenSymbol].priceAlert.below
 
-    // console.log(pricesAbove, pricesBelow);
-    
-
+    // if user does not have any price targets, return
     if (!pricesAbove && !pricesBelow) {
         return {
             shouldAlert: false, 
@@ -77,24 +77,6 @@ function shouldAlertUser(
     }
 }
 
-function notifyByEmail(subscriber:string, email: string, tokenSymbol: string, price: number) {
-    console.log(
-        `NOTIFIYING: ${subscriber} 
-        by Email: ${email} 
-        for token: ${tokenSymbol} 
-        at price ${price}
-    `);
-}
-
-function notifyByTelegram(subscriber:string, username: string, tokenSymbol: string, price: number) {
-    console.log(
-        `NOTIFIYING: ${subscriber} 
-        by telegram username: ${username} 
-        for token: ${tokenSymbol} 
-        at price ${price}
-    `);
-}
-
 export function sendPriceAlertToAllUsers(
     price: number, 
     tokenSymbol: string,
@@ -107,7 +89,7 @@ export function sendPriceAlertToAllUsers(
     message: string
 }
 {
-
+    // initate return objects for feedback
     const alertsSentTo: {name:string, by: string}[] = []
     const alertsNotSentTo: string[] = []
 
@@ -123,7 +105,6 @@ export function sendPriceAlertToAllUsers(
 
     // get token subscribers
     const subscribers: string[] = tokenAlerts[tokenSymbol].subscribers
-
     if (!subscribers) {
         return { 
             error: true,
@@ -133,22 +114,21 @@ export function sendPriceAlertToAllUsers(
         }
     }
 
+    // for each subscriber of a token, alert them by their desired notification
+    // service (email or telegram) if their price targets are reached.
     subscribers.forEach( subscriber => {
         const {shouldAlert, error, message } = shouldAlertUser(subscriber, tokenSymbol, price)
         
         if (shouldAlert) {
-
-            const clientEmail = clients[subscriber].notificationServices.email
-            const clientTelegram = clients[subscriber].notificationServices.telegram
-
-            console.log(clientEmail, clientTelegram);
             
-            if ( clientEmail != "") {
-                notifyByEmail(subscriber, clientEmail, tokenSymbol, price)
+            const clientInfo = clients[subscriber]
+
+            if ( clientInfo.notifyBy.email ) {
+                notifyByEmail(subscriber, clientInfo.email , tokenSymbol, price)
                 alertsSentTo.push({name: subscriber, by: "email"})
             }
-            if ( clientTelegram!= "") {
-                notifyByTelegram(subscriber, clientTelegram, tokenSymbol, price)
+            if ( clientInfo.notifyBy.telegram ) {
+                notifyByTelegram(subscriber, clientInfo.telegram, tokenSymbol, price)
                 alertsSentTo.push({name: subscriber, by: "telegram"})
             }
 
