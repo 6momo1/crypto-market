@@ -3,7 +3,7 @@
       "Bill": {
             "tokenWatchlist": {
                 "WETH": {
-                    "priceAlert": {
+                    "priceAlerts": {
                         "above": [
                             3000.00,
                             3200.00
@@ -25,7 +25,7 @@
       "Grace": {
             "tokenWatchlist": {
                 "WETH": {
-                    "priceAlert": {
+                    "priceAlerts": {
                         "above": [
                             2900.00
                         ],
@@ -33,7 +33,7 @@
                     }
                 },
                 "WBTC": {
-                    "priceAlert": {
+                    "priceAlerts": {
                         "above": [
                             50000.00
                         ],
