@@ -1,17 +1,46 @@
 
-POST http://localhost:5000/fetchTokenDatas
-content-type: application/json
+# POST http://localhost:3000/fetchTokenDatas
+# content-type: application/json
 
-{
-    "addresses": [
-        "0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611",
-        "0"
-    ]
-}
+# {
+#     "addresses": [
+#         "0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611",
+#         "0"
+#     ]
+# }
 
-# POST http://localhost:5000/fetchTokenPriceData
+# POST http://localhost:3000/fetchTokenPriceData
 # content-type: application/json
 
 # {
 #     "address": "0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611"
 # }
+
+
+POST http://localhost:3000/clients/client_create
+content-type: application/json
+
+{
+    "name": "Bill",
+    "tokenWatchlist": [
+        {
+            "tokenSymbol":"WETH",
+            "priceAlerts": {
+                "above": [
+                    3000.00,
+                    3200.00
+                ],
+                "below": [
+                    2900.00
+                ]
+            }
+        }
+    ],
+    "notifyBy": {
+        "email": true,
+        "telegram": true
+    },
+    "email": "billy@gmail.com",
+    "telegram": "billy123",
+    "member": true
+}        

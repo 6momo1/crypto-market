@@ -1,6 +1,10 @@
 import { useFetchTokenPriceData } from "../data/tokens/priceData";
 import { sendPriceAlertToAllUsers } from "../utils/tokenAlerts";
 import * as tokenAlerts_json from "../mock_database/tokenAlerts.json"
+import mongoose from 'mongoose'
+import { Client } from '../models/users'
+
+require('dotenv').config({path:__dirname+'/./../../.env'})
 
 enum tokenIds {
     WETH = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -42,10 +46,8 @@ function sendPriceAlertToAllUsersTEST() {
   
 }
 
-sendPriceAlertToAllUsersTEST()
 
-// const tokenAlerts = tokenAlerts_json.tokenAlerts
-// const sym = "WETH"
-// console.log(tokenAlerts[sym].subscribers);
+// sendPriceAlertToAllUsersTEST()
+
 
 

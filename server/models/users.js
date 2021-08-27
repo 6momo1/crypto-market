@@ -6,6 +6,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Client = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
+const tokenWatchlistSchema = new Schema({
+    tokenSymbol: {
+        type: String,
+        required: true
+    },
+    priceAlerts: [{
+            above: [{
+                    type: Number,
+                    required: false
+                }],
+            below: [{
+                    type: Number,
+                    required: false
+                }]
+        }]
+});
 const clientSchema = new Schema({
     name: {
         type: String,
@@ -32,19 +48,6 @@ const clientSchema = new Schema({
         type: String,
         required: true
     },
-    tokenWatchlist: {
-        tokenName: {
-            priceAlerts: {
-                above: [{
-                        type: Number,
-                        required: false
-                    }],
-                below: [{
-                        type: Number,
-                        required: false
-                    }]
-            }
-        }
-    }
+    tokenWatchlist: [tokenWatchlistSchema]
 }, { timestamps: true });
-exports.Client = mongoose_1.default.model('Blog', clientSchema);
+exports.Client = mongoose_1.default.model('Client', clientSchema);

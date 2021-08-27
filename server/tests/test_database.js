@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tokenAlerts_1 = require("../utils/tokenAlerts");
+require('dotenv').config({ path: __dirname + '/./../../.env' });
 var tokenIds;
 (function (tokenIds) {
     tokenIds["WETH"] = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
@@ -38,7 +39,4 @@ function sendPriceAlertToAllUsersTEST() {
     const res = tokenAlerts_1.sendPriceAlertToAllUsers(3000.00, "WETH", data.WETH);
     console.log(res);
 }
-sendPriceAlertToAllUsersTEST();
-// const tokenAlerts = tokenAlerts_json.tokenAlerts
-// const sym = "WETH"
-// console.log(tokenAlerts[sym].subscribers);
+// sendPriceAlertToAllUsersTEST()
