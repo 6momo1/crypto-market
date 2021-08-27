@@ -1,4 +1,4 @@
 node_modules/
 /keys.json
-/server/*.js
+**/server/*.js
 yarn-error.log/
