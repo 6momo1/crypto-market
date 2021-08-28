@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testEndpoint = exports.user_edit_telegram = exports.user_edit_email = exports.user_remove_token_price_alert = exports.user_unsubscribe_to_token = exports.user_delete = exports.user_subscribe_to_new_token = exports.user_create = void 0;
+exports.user_edit_membership = exports.user_edit_telegram = exports.user_edit_email = exports.user_remove_token_price_alert = exports.user_unsubscribe_to_token = exports.user_delete = exports.user_subscribe_to_new_token = exports.user_create = void 0;
 const users_1 = require("../models/users");
 const tokenAlerts_1 = require("../models/tokenAlerts");
 const tokenData_1 = require("../data/tokens/tokenData");
@@ -159,13 +159,13 @@ const user_delete = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         if (!user) {
             console.log("user not found and not deleted");
-            return res.sendStatus(404);
+            return res.send(404);
         }
         console.log("user id of: " + _id + " has been deleted.");
     }
     catch (e) {
         console.log(e);
-        return res.sendStatus(400);
+        return res.send(400);
     }
 });
 exports.user_delete = user_delete;
@@ -178,7 +178,7 @@ const user_unsubscribe_to_token = (req, res) => __awaiter(void 0, void 0, void 0
     try {
         if (!tokenAlert) {
             console.log("could not find token alert object");
-            return res.sendStatus(404);
+            return res.send(404);
         }
         console.log(tokenAlert);
         const idx = tokenAlert.subscribers.indexOf(_id);
@@ -187,19 +187,19 @@ const user_unsubscribe_to_token = (req, res) => __awaiter(void 0, void 0, void 0
             tokenAlert.save();
         }
         console.log("User removed from token subscribers list");
-        res.sendStatus(200);
+        res.send(200);
     }
     catch (e) {
         console.log(e);
         console.log("failed to remove user from token subscribers list");
-        return res.sendStatus(400);
+        return res.send(400);
     }
     // remove token from users token watchlist
     const user = yield users_1.User.findById(_id);
     try {
         if (!user) {
             console.log("user not found");
-            return res.sendStatus(404);
+            return res.send(404);
         }
         // tried to use filter but why does it not work?
         let tokenInfoIdx = -1;
@@ -215,7 +215,7 @@ const user_unsubscribe_to_token = (req, res) => __awaiter(void 0, void 0, void 0
     }
     catch (e) {
         console.log(e);
-        return res.sendStatus(400);
+        return res.send(400);
     }
 });
 exports.user_unsubscribe_to_token = user_unsubscribe_to_token;
@@ -228,13 +228,13 @@ const user_remove_token_price_alert = (req, res) => __awaiter(void 0, void 0, vo
     const tokenAddress = req.query.tokenAddress;
     if (!above && !below) {
         res.json({ "message": "no price limit or floor received" });
-        res.sendStatus(400);
+        res.send(400);
     }
     const user = yield users_1.User.findById(_id);
     try {
         if (!user) {
             console.log("user not found");
-            return res.sendStatus(404);
+            return res.send(404);
         }
         // tried to use filter but why does it not work?
         let tokenInfoIdx = -1;
@@ -265,7 +265,7 @@ const user_remove_token_price_alert = (req, res) => __awaiter(void 0, void 0, vo
         }
         else {
             console.log(`User does not have a price alert of ${price} for the token.`);
-            res.sendStatus(400);
+            res.send(400);
         }
     }
     catch (e) {
@@ -279,15 +279,18 @@ const user_edit_email = (req, res) => __awaiter(void 0, void 0, void 0, function
     const email = req.query.email;
     if (!email) {
         res.json({ "error": "No email received" });
+        res.send(400);
     }
     const user = yield users_1.User.findById(_id);
     try {
         user.email = email;
         user.save();
         console.log(`email changed to ${email} for user id: ${_id}`);
+        res.send(200);
     }
     catch (e) {
         console.log(e);
+        res.send(400);
     }
 });
 exports.user_edit_email = user_edit_email;
@@ -296,19 +299,46 @@ const user_edit_telegram = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const telegram = req.query.telegram;
     if (!telegram) {
         res.json({ "error": "No telegram username received" });
+        res.send(400);
     }
     const user = yield users_1.User.findById(_id);
     try {
         user.telegram = telegram;
         user.save();
         console.log(`telegram username changed to ${telegram} for user id: ${_id}`);
+        res.send(200);
     }
     catch (e) {
         console.log(e);
+        res.send(400);
     }
 });
 exports.user_edit_telegram = user_edit_telegram;
-const testEndpoint = (req, res) => {
-    console.log(req.body);
-};
-exports.testEndpoint = testEndpoint;
+const user_edit_membership = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const _id = req.query.id;
+    const member = req.query.member;
+    if (!member) {
+        res.json({ "error": "no member" });
+        res.send(400);
+    }
+    const user = yield users_1.User.findById(_id);
+    try {
+        if (member == "true") {
+            user.member = true;
+            user.save();
+            console.log(`User with id of ${_id} changed to membership to ${member}`);
+            res.send(200);
+        }
+        if (member == "false") {
+            user.member = false;
+            user.save();
+            console.log(`User with id of ${_id} changed to membership to ${member}`);
+            res.send(200);
+        }
+    }
+    catch (e) {
+        console.log(e);
+        res.send(400);
+    }
+});
+exports.user_edit_membership = user_edit_membership;

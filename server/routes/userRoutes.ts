@@ -8,9 +8,8 @@ userRoutes.post( "/user_subscribe_to_new_token", usersControler.user_subscribe_t
 userRoutes.delete( "/user_delete/:id", usersControler.user_delete )
 userRoutes.delete( "/user_unsubscribe_to_token", usersControler.user_unsubscribe_to_token )
 userRoutes.delete( "/user_remove_token_price_alert", usersControler.user_remove_token_price_alert )
+userRoutes.delete( "/user_remove_token_price_alert", usersControler.user_remove_token_price_alert )
 
 userRoutes.post( "/user_edit_email", usersControler.user_edit_email )
 userRoutes.post( "/user_edit_telegram", usersControler.user_edit_telegram )
-
-userRoutes.post( "/testEndpoint", usersControler.testEndpoint )
-
+userRoutes.post( "/user_edit_membership", usersControler.user_edit_membership )

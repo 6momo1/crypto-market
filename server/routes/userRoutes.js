@@ -31,6 +31,7 @@ exports.userRoutes.post("/user_subscribe_to_new_token", usersControler.user_subs
 exports.userRoutes.delete("/user_delete/:id", usersControler.user_delete);
 exports.userRoutes.delete("/user_unsubscribe_to_token", usersControler.user_unsubscribe_to_token);
 exports.userRoutes.delete("/user_remove_token_price_alert", usersControler.user_remove_token_price_alert);
+exports.userRoutes.delete("/user_remove_token_price_alert", usersControler.user_remove_token_price_alert);
 exports.userRoutes.post("/user_edit_email", usersControler.user_edit_email);
 exports.userRoutes.post("/user_edit_telegram", usersControler.user_edit_telegram);
-exports.userRoutes.post("/testEndpoint", usersControler.testEndpoint);
+exports.userRoutes.post("/user_edit_membership", usersControler.user_edit_membership);

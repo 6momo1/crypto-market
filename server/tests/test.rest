@@ -60,7 +60,10 @@
 # DELETE http://localhost:3000/users/user_remove_token_price_alert?above=true&price=2500&id=612a9de9fbf389bd9efec5a7&tokenAddress=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
 
 # EDIT USER EMAIL
-POST http://localhost:3000/users/user_edit_email?id=612a9de9fbf389bd9efec5a7&email=newEmail@gmail.com
+# POST http://localhost:3000/users/user_edit_email?id=612a9de9fbf389bd9efec5a7&email=newEmail@gmail.com
 
 # EDIT USER TELEGRAM
 # POST http://localhost:3000/users/user_edit_telegram?id=612a9de9fbf389bd9efec5a7&telegram=newUsername
+
+# EDIT MEMBERSHIPT STATUS
+# POST http://localhost:3000/users/user_edit_membership?id=612a9de9fbf389bd9efec5a7&member=true
