@@ -90,6 +90,7 @@ function add_user_to_token_subscribers(req, res) {
             if (tokenAlertsRes.length != 0) {
                 if (!tokenAlertsRes[0].subscribers.includes(req.body.userId)) {
                     tokenAlertsRes[0].subscribers.push(req.body.userId);
+                    tokenAlertsRes[0].save();
                     console.log("Added userId of : " + req.body.userId + " to " + tokenAlertsRes[0].tokenSymbol);
                 }
                 else {
@@ -136,18 +137,16 @@ function add_user_to_token_subscribers(req, res) {
     watchPrice
 */
 const user_subscribe_to_new_token = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // do not add duplicate price alerts
-    update_user_token_watchlist(req, res);
-    add_user_to_token_subscribers(req, res);
+    yield update_user_token_watchlist(req, res);
+    yield add_user_to_token_subscribers(req, res);
 });
 exports.user_subscribe_to_new_token = user_subscribe_to_new_token;
+// endpoint for deleting user by id
 const user_delete = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const _id = req.params.id;
-    console.log(_id);
     // remove user from all token alerts subscribers list
     tokenAlerts_1.TokenAlerts.find({})
         .then(tokenInfos => {
-        console.log(tokenInfos);
         for (let i = 0; i < tokenInfos.length; i++) {
             const idx = tokenInfos[i].subscribers.indexOf(_id);
             if (idx > -1) {
@@ -171,6 +170,55 @@ const user_delete = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.user_delete = user_delete;
 const user_unsubscribe_to_token = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const _id = req.query.id;
+    const tokenAddress = req.query.tokenAddress;
+    // // remove user from all token alerts subscribers list
+    const tokenAlert = yield tokenAlerts_1.TokenAlerts.findOne({ tokenAddress: tokenAddress });
+    try {
+        if (!tokenAlert) {
+            console.log("could not find token alert object");
+            return res.sendStatus(404);
+        }
+        console.log(tokenAlert);
+        const idx = tokenAlert.subscribers.indexOf(_id);
+        if (idx > -1) {
+            tokenAlert.subscribers.splice(idx, 1);
+            tokenAlert.save();
+        }
+        console.log("User removed from token subscribers list");
+        res.sendStatus(200);
+    }
+    catch (e) {
+        console.log(e);
+        console.log("failed to remove user from token subscribers list");
+        return res.sendStatus(400);
+    }
+    // remove token from users token watchlist
+    const user = yield users_1.User.findById(_id);
+    try {
+        if (!user) {
+            console.log("user not found");
+            return res.sendStatus(404);
+        }
+        user.tokenWatchlist.filter(tokenInfo => {
+            return tokenInfo.tokenAddress === tokenAddress;
+        });
+        // tried to use filter but why does it not work?
+        let tokenInfoIdx = -1;
+        for (let i = 0; i < user.tokenWatchlist.length; i++) {
+            const tokenInfo = user.tokenWatchlist[i];
+            if (tokenInfo.tokenAddress == tokenAddress) {
+                tokenInfoIdx = i;
+            }
+        }
+        user.tokenWatchlist.splice(tokenInfoIdx, 1);
+        user.save();
+        console.log("token removed from users token watchlist");
+    }
+    catch (e) {
+        console.log(e);
+        return res.sendStatus(400);
+    }
 });
 exports.user_unsubscribe_to_token = user_unsubscribe_to_token;
 const user_remove_token_price_alert = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

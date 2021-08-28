@@ -23,25 +23,28 @@ export interface UserInterface extends Document {
 }
 
 const tokenWatchlistSchema = new Schema({
-
-    tokenSymbol: {
-      type: String,
-      required: true
-    },
-    member: {
-      type:Boolean,
-      required: false
-    },
-    priceAlerts: {
-        above: [{
-          type: Number,
-          required: false
-        }],
-        below: [{
-          type: Number,
-          required: false
-        }]
-    },
+  tokenAddress: {
+    type: String,
+    required: true
+  },
+  tokenSymbol: {
+    type: String,
+    required: true
+  },
+  member: {
+    type:Boolean,
+    required: false
+  },
+  priceAlerts: {
+      above: [{
+        type: Number,
+        required: false
+      }],
+      below: [{
+        type: Number,
+        required: false
+      }]
+  },
 })
 
 const userSchema = new Schema({

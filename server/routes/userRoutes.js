@@ -29,4 +29,5 @@ exports.userRoutes = express_1.default.Router();
 exports.userRoutes.post("/user_create", usersControler.user_create);
 exports.userRoutes.post("/user_subscribe_to_new_token", usersControler.user_subscribe_to_new_token);
 exports.userRoutes.delete("/user_delete/:id", usersControler.user_delete);
+exports.userRoutes.delete("/user_unsubscribe_to_token", usersControler.user_unsubscribe_to_token);
 exports.userRoutes.post("/testEndpoint", usersControler.testEndpoint);

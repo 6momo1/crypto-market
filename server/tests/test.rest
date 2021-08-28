@@ -17,7 +17,7 @@
 # }
 
 
-# # CREATE A NEW SINGLE USER
+# CREATE A NEW SINGLE USER
 # POST http://localhost:3000/users/user_create
 # content-type: application/json
 
@@ -42,11 +42,17 @@
 # content-type: application/json
 
 # {
-#   "userId": "612a8739efbd2fff4b237366",
+#   "userId": "612a9de9fbf389bd9efec5a7",
 #   "tokenSymbol":"WETH",
 #   "above": true,
 #   "watchPrice": 2500,
 #   "tokenAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
 # }
 
-DELETE http://localhost:3000/users/user_delete/612a8739efbd2fff4b237366
+# DELETE USER BY ID
+# DELETE http://localhost:3000/users/user_delete/612a8739efbd2fff4b237366
+
+# UNSUBSCRIBE TO TOKEN
+DELETE http://localhost:3000/users/user_unsubscribe_to_token?id=612a9de9fbf389bd9efec5a7&tokenAddress=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
+
+

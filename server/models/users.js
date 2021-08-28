@@ -7,6 +7,10 @@ exports.User = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_2 = require("mongoose");
 const tokenWatchlistSchema = new mongoose_2.Schema({
+    tokenAddress: {
+        type: String,
+        required: true
+    },
     tokenSymbol: {
         type: String,
         required: true
