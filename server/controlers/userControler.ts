@@ -180,6 +180,7 @@ export const user_delete = async ( req, res ) => {
 
 }
 
+// allow user to unsubscribe to token
 export const user_unsubscribe_to_token = async ( req, res ) => {
 
   const _id = req.query.id
@@ -214,9 +215,6 @@ export const user_unsubscribe_to_token = async ( req, res ) => {
       console.log("user not found")
       return res.sendStatus(404)
     } 
-    user.tokenWatchlist.filter( tokenInfo => {
-      return tokenInfo.tokenAddress === tokenAddress
-    })
 
     // tried to use filter but why does it not work?
     let tokenInfoIdx = -1
@@ -238,8 +236,100 @@ export const user_unsubscribe_to_token = async ( req, res ) => {
   }
 }
 
+// allow user to remove token price alerts
 export const user_remove_token_price_alert = async ( req, res ) => {
 
+  const _id = req.query.id
+  const above = req.query.above
+  const below = req.query.below
+  const price = req.query.price
+  const tokenAddress = req.query.tokenAddress
+  
+  if (!above && !below) {
+    res.json({"message":"no price limit or floor received"})
+    res.sendStatus(400)
+  }
+
+  const user = await User.findById(_id)
+  try {
+    if ( !user ) {
+      console.log("user not found")
+      return res.sendStatus(404)
+    } 
+
+    // tried to use filter but why does it not work?
+    let tokenInfoIdx = -1
+    for (let i = 0; i < user.tokenWatchlist.length; i++) {
+      const tokenInfo = user.tokenWatchlist[i];
+      if (tokenInfo.tokenAddress == tokenAddress) {
+        tokenInfoIdx = i
+      }
+    }
+    const userPriceAlerts = user.tokenWatchlist[tokenInfoIdx].priceAlerts
+    if (tokenInfoIdx > -1) {
+      if (above) {
+        const priceIndex = userPriceAlerts.above.indexOf(price)
+        if ( priceIndex > -1 ) {
+          userPriceAlerts.above.splice(priceIndex, 1)
+          user.save()
+          console.log(`Price alert of ${price} removed from token watchlist ${user.tokenWatchlist[tokenInfoIdx].tokenSymbol}`);
+        }
+      }
+      if (below) {
+        const priceIndex = userPriceAlerts.below.indexOf(price)
+        if ( priceIndex > -1 ) {
+          userPriceAlerts.below.splice(priceIndex, 1)
+          user.save()
+          console.log(`Price alert of ${price} removed from token watchlist ${user.tokenWatchlist[tokenInfoIdx].tokenSymbol}`);
+        }
+      }
+    } else {
+      console.log(`User does not have a price alert of ${price} for the token.`);
+      res.sendStatus(400);
+    }
+
+  } catch(e) {
+    console.log(e);
+    res.send(400)
+  }
+}
+
+export const user_edit_email = async ( req, res ) => {
+  const _id = req.query.id
+  const email = req.query.email
+
+  if (!email) {
+    res.json({"error":"No email received"})
+  }
+
+  const user = await User.findById(_id)
+  try {
+    user.email = email
+    user.save()
+    console.log(`email changed to ${email} for user id: ${_id}`)
+
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const user_edit_telegram = async (req, res ) => {
+  
+  const _id = req.query.id
+  const telegram = req.query.telegram
+
+  if (!telegram) {
+    res.json({"error":"No telegram username received"})
+  }
+
+  const user = await User.findById(_id)
+  try {
+    user.telegram = telegram
+    user.save()
+    console.log(`telegram username changed to ${telegram} for user id: ${_id}`)
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export const testEndpoint = (req, res ) => {

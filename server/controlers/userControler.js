@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testEndpoint = exports.user_remove_token_price_alert = exports.user_unsubscribe_to_token = exports.user_delete = exports.user_subscribe_to_new_token = exports.user_create = void 0;
+exports.testEndpoint = exports.user_edit_telegram = exports.user_edit_email = exports.user_remove_token_price_alert = exports.user_unsubscribe_to_token = exports.user_delete = exports.user_subscribe_to_new_token = exports.user_create = void 0;
 const users_1 = require("../models/users");
 const tokenAlerts_1 = require("../models/tokenAlerts");
 const tokenData_1 = require("../data/tokens/tokenData");
@@ -169,6 +169,7 @@ const user_delete = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.user_delete = user_delete;
+// allow user to unsubscribe to token
 const user_unsubscribe_to_token = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const _id = req.query.id;
     const tokenAddress = req.query.tokenAddress;
@@ -200,9 +201,6 @@ const user_unsubscribe_to_token = (req, res) => __awaiter(void 0, void 0, void 0
             console.log("user not found");
             return res.sendStatus(404);
         }
-        user.tokenWatchlist.filter(tokenInfo => {
-            return tokenInfo.tokenAddress === tokenAddress;
-        });
         // tried to use filter but why does it not work?
         let tokenInfoIdx = -1;
         for (let i = 0; i < user.tokenWatchlist.length; i++) {
@@ -221,9 +219,95 @@ const user_unsubscribe_to_token = (req, res) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.user_unsubscribe_to_token = user_unsubscribe_to_token;
+// allow user to remove token price alerts
 const user_remove_token_price_alert = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const _id = req.query.id;
+    const above = req.query.above;
+    const below = req.query.below;
+    const price = req.query.price;
+    const tokenAddress = req.query.tokenAddress;
+    if (!above && !below) {
+        res.json({ "message": "no price limit or floor received" });
+        res.sendStatus(400);
+    }
+    const user = yield users_1.User.findById(_id);
+    try {
+        if (!user) {
+            console.log("user not found");
+            return res.sendStatus(404);
+        }
+        // tried to use filter but why does it not work?
+        let tokenInfoIdx = -1;
+        for (let i = 0; i < user.tokenWatchlist.length; i++) {
+            const tokenInfo = user.tokenWatchlist[i];
+            if (tokenInfo.tokenAddress == tokenAddress) {
+                tokenInfoIdx = i;
+            }
+        }
+        const userPriceAlerts = user.tokenWatchlist[tokenInfoIdx].priceAlerts;
+        if (tokenInfoIdx > -1) {
+            if (above) {
+                const priceIndex = userPriceAlerts.above.indexOf(price);
+                if (priceIndex > -1) {
+                    userPriceAlerts.above.splice(priceIndex, 1);
+                    user.save();
+                    console.log(`Price alert of ${price} removed from token watchlist ${user.tokenWatchlist[tokenInfoIdx].tokenSymbol}`);
+                }
+            }
+            if (below) {
+                const priceIndex = userPriceAlerts.below.indexOf(price);
+                if (priceIndex > -1) {
+                    userPriceAlerts.below.splice(priceIndex, 1);
+                    user.save();
+                    console.log(`Price alert of ${price} removed from token watchlist ${user.tokenWatchlist[tokenInfoIdx].tokenSymbol}`);
+                }
+            }
+        }
+        else {
+            console.log(`User does not have a price alert of ${price} for the token.`);
+            res.sendStatus(400);
+        }
+    }
+    catch (e) {
+        console.log(e);
+        res.send(400);
+    }
 });
 exports.user_remove_token_price_alert = user_remove_token_price_alert;
+const user_edit_email = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const _id = req.query.id;
+    const email = req.query.email;
+    if (!email) {
+        res.json({ "error": "No email received" });
+    }
+    const user = yield users_1.User.findById(_id);
+    try {
+        user.email = email;
+        user.save();
+        console.log(`email changed to ${email} for user id: ${_id}`);
+    }
+    catch (e) {
+        console.log(e);
+    }
+});
+exports.user_edit_email = user_edit_email;
+const user_edit_telegram = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const _id = req.query.id;
+    const telegram = req.query.telegram;
+    if (!telegram) {
+        res.json({ "error": "No telegram username received" });
+    }
+    const user = yield users_1.User.findById(_id);
+    try {
+        user.telegram = telegram;
+        user.save();
+        console.log(`telegram username changed to ${telegram} for user id: ${_id}`);
+    }
+    catch (e) {
+        console.log(e);
+    }
+});
+exports.user_edit_telegram = user_edit_telegram;
 const testEndpoint = (req, res) => {
     console.log(req.body);
 };
