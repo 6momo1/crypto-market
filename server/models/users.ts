@@ -1,5 +1,26 @@
 import mongoose from 'mongoose'
-const Schema = mongoose.Schema;
+import { Document, Schema } from 'mongoose'
+
+export interface TokenWatchlistInterface {
+  tokenSymbol: string,
+  tokenAddress: string,
+  priceAlerts: {
+    above?: number[],
+    below?: number[]
+  }
+}
+
+export interface UserInterface extends Document {
+  name: string,
+  notifyBy: {
+    email: string,
+    telegram: string
+  },
+  email: string,
+  telegram: string,
+  tokenWatchlist: TokenWatchlistInterface[],
+  member: boolean
+}
 
 const tokenWatchlistSchema = new Schema({
 
@@ -7,7 +28,11 @@ const tokenWatchlistSchema = new Schema({
       type: String,
       required: true
     },
-    priceAlerts: [{
+    member: {
+      type:Boolean,
+      required: false
+    },
+    priceAlerts: {
         above: [{
           type: Number,
           required: false
@@ -16,10 +41,10 @@ const tokenWatchlistSchema = new Schema({
           type: Number,
           required: false
         }]
-    }]
+    },
 })
 
-const clientSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -45,8 +70,11 @@ const clientSchema = new Schema({
     type: String,
     required: true
   },
-  tokenWatchlist: [tokenWatchlistSchema]
-  
+  tokenWatchlist: [tokenWatchlistSchema],
+  member: {
+    type: Boolean,
+    required: true
+  }
 }, { timestamps: true });
 
-export const Client = mongoose.model('Client', clientSchema);
+export const User = mongoose.model<UserInterface>('User', userSchema);

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useFetchedTokenDatas = exports.TOKENS_BULK = void 0;
+exports.useFetchTokenDatas = exports.TOKENS_BULK = void 0;
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
 const TOKENS_BULK = (block, tokens) => {
     let tokenString = `[`;
@@ -44,7 +44,7 @@ exports.TOKENS_BULK = TOKENS_BULK;
 /**
  * Fetch top addresses by volume
  */
-function useFetchedTokenDatas(tokenAddresses, client) {
+function useFetchTokenDatas(tokenAddresses, client) {
     return __awaiter(this, void 0, void 0, function* () {
         let data;
         yield client.query({ query: exports.TOKENS_BULK(undefined, tokenAddresses) })
@@ -62,4 +62,4 @@ function useFetchedTokenDatas(tokenAddresses, client) {
         };
     });
 }
-exports.useFetchedTokenDatas = useFetchedTokenDatas;
+exports.useFetchTokenDatas = useFetchTokenDatas;

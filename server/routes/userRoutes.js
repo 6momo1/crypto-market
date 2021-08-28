@@ -22,8 +22,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clientRoutes = void 0;
+exports.userRoutes = void 0;
 const express_1 = __importDefault(require("express"));
-const clientsControler = __importStar(require("../controlers/clientsControler"));
-exports.clientRoutes = express_1.default.Router();
-exports.clientRoutes.post("/client_create", clientsControler.client_create);
+const usersControler = __importStar(require("../controlers/userControler"));
+exports.userRoutes = express_1.default.Router();
+exports.userRoutes.post("/user_create", usersControler.user_create);
+exports.userRoutes.post("/user_subscribe_to_new_token", usersControler.user_subscribe_to_new_token);
+exports.userRoutes.delete("/user_delete/:id", usersControler.user_delete);
+exports.userRoutes.post("/testEndpoint", usersControler.testEndpoint);

@@ -80,7 +80,7 @@ interface TokenDataResponse {
 /**
  * Fetch top addresses by volume
  */
-export async function useFetchedTokenDatas(
+export async function useFetchTokenDatas(
   tokenAddresses: string[],
   client: ApolloClient<any>
 ): 

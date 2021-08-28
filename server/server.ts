@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import { fetchDataRoutes } from "./routes/fetchDataRoutes"
-import { clientRoutes } from "./routes/clientRoutes"
+import { userRoutes } from "./routes/userRoutes"
 import mongoose from 'mongoose'
 require('dotenv').config({path:__dirname+'/./../.env'})
 
@@ -28,4 +28,4 @@ app.get( "/", ( req, res ) => {
 
 // data fetching routes
 app.use('/fetch', fetchDataRoutes)
-app.use('/clients', clientRoutes)
+app.use('/users', userRoutes)

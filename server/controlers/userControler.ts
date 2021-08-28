@@ -1,0 +1,195 @@
+import { User, TokenWatchlistInterface } from '../models/users'
+import { TokenAlertInterface, TokenAlerts } from '../models/tokenAlerts'
+import { UserInterface } from '../models/users'
+import { useFetchTokenDatas } from '../data/tokens/tokenData'
+import { useFetchTokenPriceData } from '../data/tokens/priceData'
+import { client } from '../apollo'
+import { userRoutes } from '../routes/userRoutes'
+
+/*
+  http request body must have:
+    name,
+    notifyBy:{
+      email: boolean
+      telegram: boolean
+    },
+    email
+    telegram,
+    member
+*/
+export const user_create = ( req, res ) => {
+
+  const newUser = new User(req.body)
+  newUser.save()
+    .then( result => {
+      console.log("A new user created: ", newUser)
+    })
+    .catch(console.log)
+}
+
+// helper function to update users token watchlist
+async function update_user_token_watchlist( req, res ) {
+
+  await User.findOne({_id:req.body.userId})
+    .then( user => {
+
+      // update user token watchlist if user is already subscribed to the token
+      const tokenInfoIdx = user.tokenWatchlist.findIndex( tokenInfo => 
+        tokenInfo.tokenAddress === req.body.tokenAddress
+      )
+
+      // if token object found in user's watchlist found
+      if (tokenInfoIdx != -1) {
+          if (req.body.above) {
+            user.tokenWatchlist[tokenInfoIdx].priceAlerts.above.push(req.body.watchPrice)
+          }
+          if (req.body.below) {
+            user.tokenWatchlist[tokenInfoIdx].priceAlerts.below.push(req.body.watchPrice)
+          }
+          console.log("users token watchlist updated:", user.tokenWatchlist[tokenInfoIdx]);
+          user.save()
+      }
+      else {
+      // else create a new instance of the tokenlist object to push to user watchlist array
+        const newUserTokenWatchlist:TokenWatchlistInterface = {
+          tokenSymbol: req.body.tokenSymbol,
+          tokenAddress: req.body.tokenAddress,
+          priceAlerts: {
+            above: [],
+            below: [],
+          }
+        }
+
+        if (req.body.above) {
+          newUserTokenWatchlist.priceAlerts.above.push(req.body.watchPrice)
+        }
+        if (req.body.below) {
+          newUserTokenWatchlist.priceAlerts.below.push(req.body.watchPrice)
+        }
+        user.tokenWatchlist.push(newUserTokenWatchlist)
+
+        console.log("new token added to users token watchlist: ", newUserTokenWatchlist)
+        user.save()
+      }
+
+    })
+    .catch( err => {
+      console.log("Error: could not search given user by id")
+      console.log(err);
+      res.json({"error": "Error: could not search given user by id"})
+    })
+}
+
+// helper function to add user to tokenAlerts subscribers list
+async function add_user_to_token_subscribers (req, res ) {
+
+  // update token alerts database
+  await TokenAlerts.find({tokenAddress: req.body.tokenAddress})
+    .then( tokenAlertsRes => {
+
+      // add user to token subscribers list if it already exists
+      if ( tokenAlertsRes.length != 0 ) {
+        if ( !tokenAlertsRes[0].subscribers.includes(req.body.userId) ) {
+          tokenAlertsRes[0].subscribers.push(req.body.userId)
+          console.log("Added userId of : " + req.body.userId + " to " + tokenAlertsRes[0].tokenSymbol);
+        }
+        else {
+          console.log("user is already subscribed to this token.");
+        }
+      }
+      else {
+        // create a new price alert object
+        useFetchTokenDatas( [req.body.tokenAddress] , client )
+          .then( tokenDatas => {
+
+            console.log(tokenDatas);
+
+            // check if token data was fetched
+            if ( Object.keys(tokenDatas.data).length == 0) {
+              res.json({"error": "Invalid token address"})
+            }
+            
+            // create new instance of token alert object to update database
+            const newTokenAlert = new TokenAlerts({
+              tokenSymbol: tokenDatas.data[req.body.tokenAddress].symbol,
+              tokenName: tokenDatas.data[req.body.tokenAddress].name,
+              tokenAddress: req.body.tokenAddress,
+              subscribers: []
+            })
+            
+            newTokenAlert.subscribers.push(req.body.userId)
+            newTokenAlert.save()
+            console.log("New Token alert object created: ", newTokenAlert);
+          })
+          .catch( err => {
+            console.log("Failed to create new Token alerts object");
+            console.log(err);
+          })
+      }
+    })
+    .catch( err => {
+      console.log("Error searching for a tokenAlerts Object. ")
+    })
+
+}
+
+/*
+  http request body must have:
+    userId,
+    tokneSymbol,
+    tokenAddress,
+    above? or below?
+    watchPrice
+*/
+export const user_subscribe_to_new_token = async ( req, res ) => {
+
+  // do not add duplicate price alerts
+  update_user_token_watchlist( req, res )
+
+  add_user_to_token_subscribers( req, res )
+}
+
+export const user_delete = async ( req, res ) => {
+
+  const _id = req.params.id
+  console.log(_id);
+  
+  // remove user from all token alerts subscribers list
+  TokenAlerts.find({})
+    .then( tokenInfos => {
+      console.log(tokenInfos);
+      for (let i = 0; i < tokenInfos.length; i++) {
+        const idx = tokenInfos[i].subscribers.indexOf(_id)
+        if ( idx > -1 ) {
+          tokenInfos[i].subscribers.splice(idx, 1)
+          tokenInfos[i].save()
+        }
+      }
+    })
+
+  const user = await User.findByIdAndDelete(_id)
+  try {
+    if ( !user ) {
+      console.log("user not found and not deleted")
+      return res.sendStatus(404)
+    } 
+    console.log("user id of: " + _id + " has been deleted.")
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(400)
+  }
+
+
+}
+
+export const user_unsubscribe_to_token = async ( req, res ) => {
+
+}
+
+export const user_remove_token_price_alert = async ( req, res ) => {
+
+}
+
+export const testEndpoint = (req, res ) => {
+  console.log(req.body);
+}

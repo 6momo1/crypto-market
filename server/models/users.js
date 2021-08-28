@@ -3,26 +3,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Client = void 0;
+exports.User = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const Schema = mongoose_1.default.Schema;
-const tokenWatchlistSchema = new Schema({
+const mongoose_2 = require("mongoose");
+const tokenWatchlistSchema = new mongoose_2.Schema({
     tokenSymbol: {
         type: String,
         required: true
     },
-    priceAlerts: [{
-            above: [{
-                    type: Number,
-                    required: false
-                }],
-            below: [{
-                    type: Number,
-                    required: false
-                }]
-        }]
+    member: {
+        type: Boolean,
+        required: false
+    },
+    priceAlerts: {
+        above: [{
+                type: Number,
+                required: false
+            }],
+        below: [{
+                type: Number,
+                required: false
+            }]
+    },
 });
-const clientSchema = new Schema({
+const userSchema = new mongoose_2.Schema({
     name: {
         type: String,
         required: true,
@@ -48,6 +52,10 @@ const clientSchema = new Schema({
         type: String,
         required: true
     },
-    tokenWatchlist: [tokenWatchlistSchema]
+    tokenWatchlist: [tokenWatchlistSchema],
+    member: {
+        type: Boolean,
+        required: true
+    }
 }, { timestamps: true });
-exports.Client = mongoose_1.default.model('Client', clientSchema);
+exports.User = mongoose_1.default.model('User', userSchema);
