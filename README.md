@@ -5,10 +5,17 @@
 - [ ] allow users to login with metamask
 - [ ] allow users to login with google account
 
-- [ ] allow users to add token to their own watchlist with price targets
+- [x] allow users to add token to their own watchlist with price targets
 - [ ] server fetches all token price every minute and alert users if price targets are met
 
 - [ ] create database analytics
+
+- [x] allow data fetching for uniswap
+- [ ] allow data fetching for pancakeswap
+
+- [ ] Authentication methods: JWT, cookies, sessions?
+
+
 
 ### TODO - client side
 - [ ] user login page

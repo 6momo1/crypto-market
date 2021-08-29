@@ -1,21 +1,22 @@
-
 // json rpc
-// crypto market watch
 // es6 vs node
 
 
 activate watch mode
 npx tsc -w
 
-things I need to query
+questions:
+how do I correctly manage users?
+  should I restructure my database?
+perioredically call a function?
 
-token pair address
-display list
+admin user authentication, allow delete users and stuff
 
+authentication methods, jwt, cookies, sessions?
+how can I ignore all the .js files in my server in git?
 
+How can I deploy it?
+serverless or server?
+problems with scalability?
 
-
-schema
-host on discord bot
-email
-telegram
+how can I self learn other than youtube?

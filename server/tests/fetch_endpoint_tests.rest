@@ -1,0 +1,21 @@
+
+POST http://localhost:3000/fetch/fetchTokenDatas
+content-type: application/json
+
+{
+    "addresses": [
+        "0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611",
+        "0"
+    ]
+}
+
+###
+
+POST http://localhost:3000/fetch/fetchTokenPriceData
+content-type: application/json
+
+{
+    "address": "0x6b4c7a5e3f0b99fcd83e9c089bddd6c7fce5c611"
+}
+
+###

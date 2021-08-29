@@ -1,6 +1,6 @@
 import { fetchSearchResults } from "../data/search";
 import { client } from "../apollo";
-import { useFetchedTokenDatas } from "../data/tokens/tokenData";
+import { useFetchTokenDatas } from "../data/tokens/tokenData";
 import { useFetchTokenPriceData } from "../data/tokens/priceData";
 import { fetchTokenTransactions } from "../data/tokens/transactions"
 import { useTopTokenAddresses } from "../data/tokens/topTokens";
@@ -9,7 +9,7 @@ import { fetchTokenChartData } from "../data/tokens/chartData";
 
 // // get current block number
 // const Web3 = require('Web3');
-// var web3 = new Web3('https://mainnet.infura.io/v3/9858506045b5436a83baed0be0a00714');
+// var web3 = new Web3('');
 // web3.eth.getBlockNumber()
 // .then(num => {
 //     console.log(num)
@@ -35,7 +35,7 @@ async function fetchTokenTransactionTest() {
 // fetch token data
 async function fetchTokenDatasTest() {
     console.log("FETCHING TOKEN DATA");
-    await useFetchedTokenDatas([tokenIds.WETH, tokenIds.WBTC], client)
+    await useFetchTokenDatas([tokenIds.WETH, tokenIds.WBTC], client)
     .then(console.log)
     .catch( error => {
         console.log(error);
