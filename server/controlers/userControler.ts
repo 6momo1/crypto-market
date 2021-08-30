@@ -144,7 +144,6 @@ async function add_user_to_token_subscribers (req, res ) {
     watchPrice
 */
 export const user_subscribe_to_new_token = async ( req, res ) => {
-
   await update_user_token_watchlist( req, res )
   await add_user_to_token_subscribers( req, res )
 }
@@ -303,8 +302,8 @@ export const user_edit_email = async ( req, res ) => {
     res.send(400)
   }
 
-  const user = await User.findById(_id)
   try {
+    const user = await User.findById(_id)
     user.email = email
     user.save()
     console.log(`email changed to ${email} for user id: ${_id}`)

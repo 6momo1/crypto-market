@@ -15,12 +15,11 @@
 
 - [ ] Authentication methods: JWT, cookies, sessions?
 
-
-
 ### TODO - client side
 - [ ] user login page
 - [ ] token overview page
 - [ ] user dashboard page
+      what features?
 
 - [ ] allow users to manage their token price targets
 - [ ] allow users to edit their personal information

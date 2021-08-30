@@ -8,15 +8,36 @@ npx tsc -w
 questions:
 how do I correctly manage users?
   should I restructure my database?
-perioredically call a function?
+  is my database schema too complicated?
+
+google account linking, middleware for routes, authentication resources, such as opensource, socket to fetch data,
+
+middle ware for authentication:
+  how to add middleware for routes
+
+*login page, and authentication
+
+how can I perioredically call a function to fetch data?
+  use sockets
+
+a lot of .then .catch in user controler, is this correct?
 
 admin user authentication, allow delete users and stuff
 
 authentication methods, jwt, cookies, sessions?
+  jwt is saved in cookies or sessions
+
 how can I ignore all the .js files in my server in git?
 
 How can I deploy it?
 serverless or server?
 problems with scalability?
 
+cost of deployment?
+ads?
+
+
 how can I self learn other than youtube?
+  documentation
+  udacity udemy
+

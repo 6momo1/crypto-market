@@ -1,5 +1,5 @@
 import { client } from "../apollo"
-import { useFetchedTokenDatas } from "../data/tokens/tokenData"
+import { useFetchTokenDatas } from "../data/tokens/tokenData"
 import web3 from "web3"
 import { useFetchTokenPriceData } from "../data/tokens/priceData"
 
@@ -21,7 +21,7 @@ export const tokenDatas = async ( req: any , res ) => {
     })
     
     // fetch token datas
-    await useFetchedTokenDatas( validAdrs, client )
+    await useFetchTokenDatas( validAdrs, client )
     .then( tokenDatas => {
         let result = { addresses: {valid: validAdrs, invalid: invalidAdrs} , tokenDatas }
         res.send(result)
