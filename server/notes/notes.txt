@@ -11,6 +11,8 @@ how do I correctly manage users?
   is my database schema too complicated?
 
 google account linking, middleware for routes, authentication resources, such as opensource, socket to fetch data,
+// add validation, single lenght, etc...
+// validator library
 
 middle ware for authentication:
   how to add middleware for routes
