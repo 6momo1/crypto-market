@@ -25,7 +25,7 @@ function App() {
               <Route exact path="/user">
                 <User />
               </Route>
-              <Route exact path="/token:id">
+              <Route exact path="/token/:id">
                 <Token />
               </Route>
               <Route path="*">

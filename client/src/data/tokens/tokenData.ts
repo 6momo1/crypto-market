@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import { ApolloError, useQuery } from "@apollo/client";
 import { client } from "../../apollo";
+import { useState, useEffect } from "react";
 
 export type TokenData = {
   // token is in some pool on uniswap
@@ -73,47 +74,48 @@ interface TokenFields {
 
 interface TokenDataResponse {
   tokens: TokenFields[];
-  bundles: {
-    ethPriceUSD: string;
-  }[];
 }
 
 /**
  * Fetch top addresses by volume
  */
-export async function useFetchTokenDatas(tokenAddresses: string[]): Promise<{
-  // loading: boolean;
-  // error: ApolloError | undefined;
-  // data:
-  //   | {
-  //       [address: string]: TokenData;
-  //     }
-  //   | undefined;
-}> {
-  const { loading, error, data } = useQuery<TokenDataResponse | undefined>(
+export const useFetchTokenDatas = (tokenAddresses: string[]) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [data, setData] = useState<
+    { [address: string]: TokenFields } | undefined
+  >(undefined);
+
+  const {
+    data: queryData,
+    error: queryError,
+    loading: queryLoading,
+  } = useQuery<TokenDataResponse | undefined>(
     TOKENS_BULK(undefined, tokenAddresses),
     {
       client: client,
     }
   );
 
-  const parsed = data?.tokens
-    ? data.tokens.reduce(
+  const parsed = queryData?.tokens
+    ? queryData.tokens.reduce(
         (accum: { [address: string]: TokenFields }, poolData) => {
           accum[poolData.id] = poolData;
           return accum;
         },
         {}
       )
-    : {}; 
-  
-  console.log("data", data)
-  console.log("parsed", parsed);
-  
+    : {};
 
-  return {
-    loading,
-    error,
-    data,
-  };
-}
+  if (queryError) {
+    setError(true);
+  }
+  if (queryLoading) {
+    setLoading(true);
+  }
+  if (queryData) {
+  setData(parsed);
+  }
+
+  return { data, error, loading };
+};
