@@ -4,7 +4,7 @@ import { Document, Schema } from 'mongoose'
 export interface TokenAlertInterface extends Document {
   tokenSymbol: string,
   tokenName:string,
-  subscribers: string[]
+  subscribers: mongoose.Schema.Types.ObjectId[]
   tokenAddress: string,
 }
 
@@ -22,7 +22,10 @@ const tokenAlertSchema = new Schema({
     required: true
   },
   subscribers: [
-    {type:String}
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
   ]
 })
 

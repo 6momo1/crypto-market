@@ -28,15 +28,10 @@ admin user authentication, allow delete users and stuff
 
 authentication methods, jwt, cookies, sessions?
   jwt is saved in cookies or sessions
-
-how can I ignore all the .js files in my server in git?
-
+  
 How can I deploy it?
 serverless or server?
 problems with scalability?
-
-cost of deployment?
-ads?
 
 
 how can I self learn other than youtube?

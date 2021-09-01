@@ -1,22 +1,5 @@
 
 
-# CREATE A NEW SINGLE USER
-POST http://localhost:3000/users/user_create
-content-type: application/json
-
-{
-    "name": "Bill",
-    "notifyBy": {
-        "email": false,
-        "telegram": false
-    },
-    "email": "billy@gmail.com",
-    "telegram": "billy123",
-    "member": false
-}
-
-###
-
 # LET USER SUBSCRIBE TO NEW TOKEN
 POST http://localhost:3000/users/user_subscribe_to_new_token
 content-type: application/json

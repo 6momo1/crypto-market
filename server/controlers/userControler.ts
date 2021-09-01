@@ -4,7 +4,7 @@ import { UserInterface } from '../models/users'
 import { useFetchTokenDatas } from '../data/tokens/tokenData'
 import { useFetchTokenPriceData } from '../data/tokens/priceData'
 import { client } from '../apollo'
-import { userRoutes } from '../routes/userRoutes'
+import { userRoutes } from '../routes/userConfigRoutes'
 
 /*
   http request body must have:

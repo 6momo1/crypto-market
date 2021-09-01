@@ -1,3 +1,4 @@
+import { UniqueFragmentNamesRule } from 'graphql';
 import mongoose from 'mongoose'
 import { Document, Schema } from 'mongoose'
 
@@ -11,7 +12,10 @@ export interface TokenWatchlistInterface {
 }
 
 export interface UserInterface extends Document {
-  name: string,
+  googleId: string,
+  displayName: string,
+  firstName: string,
+  lastName: string,
   notifyBy: {
     email: string,
     telegram: string
@@ -48,35 +52,48 @@ const tokenWatchlistSchema = new Schema({
 })
 
 const userSchema = new Schema({
-  name: {
+  googleId: {
+    type: String,
+    required: true
+  },
+  firstName: {
     type: String,
     required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: false
   },
   notifyBy: {
     type: {
-      email: {
+        email: {
         type: Boolean,
-        required: true
+        default: false
       },
       telegram: {
         type: Boolean,
-        required: false
+        default: false
       }
     },
     required: true,
+    default: {email: false, telegram: false},
   },
   email: {
     type: String,
-    required: true
+    default: ""
   },
   telegram: {
     type: String,
-    required: true
+    default: ""
   },
   tokenWatchlist: [tokenWatchlistSchema],
   member: {
     type: Boolean,
-    required: true
+    default: false
   }
 }, { timestamps: true });
 
