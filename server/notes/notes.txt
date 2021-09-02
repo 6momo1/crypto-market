@@ -26,9 +26,6 @@ a lot of .then .catch in user controler, is this correct?
 
 admin user authentication, allow delete users and stuff
 
-authentication methods, jwt, cookies, sessions?
-  jwt is saved in cookies or sessions
-  
 How can I deploy it?
 serverless or server?
 problems with scalability?

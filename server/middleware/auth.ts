@@ -4,15 +4,15 @@ export const ensureAuth = (req, res, next) => {
     return next()
   }
   else {
-    res.redirect('/')
+    res.status(401).send("please Login first.")
   }
 }
 
 export const ensureGuest = (req, res, next) => {
   if (req.isAuthenticated()) {
-    res.redirect('/dashboard')
+    next()
   }
   else {
-    return next()
+    res.status(401)
   }
 }

@@ -1,7 +1,5 @@
-import { DocumentNode, execute, makePromise } from 'apollo-link';
 import { createHttpLink } from 'apollo-link-http';
 import fetch from 'node-fetch';
-import { gql } from 'graphql-tag'
 const InMemoryCache = require("apollo-cache-inmemory").InMemoryCache;
 import ApolloClient from 'apollo-client'
 
