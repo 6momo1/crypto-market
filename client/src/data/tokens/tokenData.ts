@@ -1,7 +1,5 @@
 import gql from "graphql-tag";
-import { ApolloError, useQuery } from "@apollo/client";
-import { client } from "../../apollo";
-import { useState, useEffect } from "react";
+import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 export type TokenData = {
   // token is in some pool on uniswap
@@ -59,7 +57,7 @@ export const TOKENS_BULK = (block: number | undefined, tokens: string[]) => {
   return gql(queryString);
 };
 
-interface TokenFields {
+export interface TokenFields {
   id: string;
   symbol: string;
   name: string;
@@ -79,43 +77,37 @@ interface TokenDataResponse {
 /**
  * Fetch top addresses by volume
  */
-export const useFetchTokenDatas = (tokenAddresses: string[]) => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [data, setData] = useState<
-    { [address: string]: TokenFields } | undefined
-  >(undefined);
+export async function fetchTokenDatas(
+  tokenAddresses: string[],
+  client: ApolloClient<NormalizedCacheObject>
+): Promise<{
+  data:
+    | {
+        [address: string]: TokenFields;
+      }
+    | undefined
+}> {
+  var data: TokenDataResponse;
+  const parsed = await client
+    .query<any>({ query: TOKENS_BULK(undefined, tokenAddresses) })
+    .then((res) => {
+      data = res.data;
 
-  const {
-    data: queryData,
-    error: queryError,
-    loading: queryLoading,
-  } = useQuery<TokenDataResponse | undefined>(
-    TOKENS_BULK(undefined, tokenAddresses),
-    {
-      client: client,
-    }
-  );
+      const parsed = data?.tokens
+        ? data.tokens.reduce(
+            (accum: { [address: string]: TokenFields }, poolData) => {
+              accum[poolData.id] = poolData;
+              return accum;
+            },
+            {}
+          )
+        : undefined;
 
-  const parsed = queryData?.tokens
-    ? queryData.tokens.reduce(
-        (accum: { [address: string]: TokenFields }, poolData) => {
-          accum[poolData.id] = poolData;
-          return accum;
-        },
-        {}
-      )
-    : {};
-
-  if (queryError) {
-    setError(true);
-  }
-  if (queryLoading) {
-    setLoading(true);
-  }
-  if (queryData) {
-  setData(parsed);
-  }
-
-  return { data, error, loading };
-};
+      return parsed;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  
+  return parsed? { data: parsed } : {data: undefined}
+}

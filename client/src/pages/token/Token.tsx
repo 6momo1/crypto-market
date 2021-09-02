@@ -1,126 +1,66 @@
-import React, { useEffect } from 'react'
-import { useFetchTokenDatas } from '../../data/tokens/tokenData'
-import { useParams } from 'react-router'
-import gql from "graphql-tag";
-import { ApolloError, useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { client } from "../../apollo";
-import Loader from '../../components/Loader';
-import Error from '../../components/Error';
+import Loader from "../../components/Loader";
+import Error from "../../components/Error";
+import {
+  PriceChartEntry,
+  fetchTokenPriceData,
+} from "../../data/tokens/priceData";
+import { useFetchTokenDatas } from "../../hooks/tokenData/useFetchTokenDatas";
+import { useFethTokenPrices } from "../../hooks/tokenData/useFetchTokenPrices";
+import { isEmptyObject } from "../../utils";
 
-export type TokenData = {
-  // token is in some pool on uniswap
-  exists: boolean;
-
-  // basic token info
-  name: string;
-  symbol: string;
-  address: string;
-
-  // volume
-  volumeUSD: number;
-  volumeUSDChange: number;
-  volumeUSDWeek: number;
-  txCount: number;
-
-  //fees
-  feesUSD: number;
-
-  // tvl
-  tvlToken: number;
-  tvlUSD: number;
-  tvlUSDChange: number;
-
-  priceUSD: number;
-  priceUSDChange: number;
-  priceUSDChangeWeek: number;
-};
-
-export const TOKENS_BULK = (block: number | undefined, tokens: string[]) => {
-  let tokenString = `[`;
-  tokens.map((address) => {
-    return (tokenString += `"${address}",`);
-  });
-  tokenString += "]";
-  const queryString =
-    `
-    query tokens {
-      tokens(where: {id_in: ${tokenString}},` +
-    (block ? `block: {number: ${block}} ,` : ``) +
-    ` orderBy: totalValueLockedUSD, orderDirection: desc, subgraphError: allow) {
-        id
-        symbol
-        name
-        derivedETH
-        volumeUSD
-        volume
-        txCount
-        totalValueLocked
-        feesUSD
-        totalValueLockedUSD
-      }
-    }
-    `;
-  return gql(queryString);
-};
-
-interface TokenFields {
+interface TokenParams {
   id: string;
-  symbol: string;
-  name: string;
-  derivedETH: string;
-  volumeUSD: string;
-  volume: string;
-  feesUSD: string;
-  txCount: string;
-  totalValueLocked: string;
-  totalValueLockedUSD: string;
-}
-
-interface TokenDataResponse {
-  tokens: TokenFields[];
-}
-
-type TokenParams = {
-  id: string,
 }
 
 const Token = () => {
+  const { id } = useParams<TokenParams>();
 
-  const { id } = useParams<TokenParams>()
-  
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const {
-    data,
-    error,
-    loading,
-  } = useQuery<TokenDataResponse | undefined>(
-    TOKENS_BULK(undefined, [id]),
-    {
-      client: client,
+    data: tokenInfo,
+    error: tokenDataError,
+    loading: tokenDataLoading,
+  } = useFetchTokenDatas([id]);
+
+  const {
+    prices,
+    error: priceError,
+    loading: priceLoading,
+  } = useFethTokenPrices(id);
+
+  useEffect(() => {
+    if (!priceError || !tokenDataError) {
+      setError(true);
     }
-  );
-  const parsedData = data?.tokens
-    ? data.tokens.reduce(
-        (accum: { [address: string]: TokenFields }, poolData) => {
-          accum[poolData.id] = poolData;
-          return accum;
-        },
-        {}
-      )
-    : {};
+  }, [priceError, tokenDataError]);
 
-  return (
-    <div>
-      {data && <div>
+  useEffect(() => {
+    if (!priceLoading && !tokenDataLoading) {
+      setLoading(false);
+    }
+  }, [priceLoading, tokenDataLoading])
+
+  if (!isEmptyObject(tokenInfo)) {
+    return (
+      <div>
         <h1>Token Page for address: {id}</h1>
-        <p>data: {JSON.stringify(parsedData)}</p>
-      </div> }
+        <p>data: {JSON.stringify(tokenInfo)}</p>
+      </div>
+    );
+  }
 
-      {loading && <Loader />}
+  if (loading) {
+    return <Loader />;
+  }
 
-      {error && <Error />}
+  if (error) return <Error message="Invalid token address" />;
 
-    </div>
-  )
-}
+  return <></>;
+};
 
-export default Token
+export default Token;
