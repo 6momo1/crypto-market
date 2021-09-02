@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { client } from "../../apollo";
 import Loader from "../../components/Loader";
 import Error from "../../components/Error";
-import {
-  PriceChartEntry,
-  fetchTokenPriceData,
-} from "../../data/tokens/priceData";
 import { useFetchTokenDatas } from "../../hooks/tokenData/useFetchTokenDatas";
 import { useFethTokenPrices } from "../../hooks/tokenData/useFetchTokenPrices";
 import { isEmptyObject } from "../../utils";
+import { useFethTokenCharts } from "../../hooks/tokenData/useChartData";
 
 interface TokenParams {
   id: string;
@@ -33,17 +29,37 @@ const Token = () => {
     loading: priceLoading,
   } = useFethTokenPrices(id);
 
+  const {
+    chartData,
+    error: chartError,
+    loading: chartLoading
+  } = useFethTokenCharts(id)
+
+  useEffect(() => {
+    console.log("chartData",chartData);
+  }, [chartData])
+
+  useEffect(() => {
+    console.log("tokenInfo", tokenInfo);
+  }, [tokenInfo])
+
+  useEffect(() => {
+    console.log("prices", prices);
+  }, [prices])
+
   useEffect(() => {
     if (!priceError || !tokenDataError) {
       setError(true);
+      console.log("error");
     }
   }, [priceError, tokenDataError]);
 
   useEffect(() => {
     if (!priceLoading && !tokenDataLoading) {
       setLoading(false);
+      console.log("loading");
     }
-  }, [priceLoading, tokenDataLoading])
+  }, [priceLoading, tokenDataLoading]);
 
   if (!isEmptyObject(tokenInfo)) {
     return (

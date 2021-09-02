@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { client } from "../../apollo";
 import { fetchTokenDatas, TokenFields } from "../../data/tokens/tokenData";
 
@@ -23,7 +23,7 @@ export const useFetchTokenDatas = (addresses: string[]) => {
         setError(true);
         setLoading(false);
       });
-  }, [addresses]);
+  }, []);
 
   return { data, error, loading };
 };
