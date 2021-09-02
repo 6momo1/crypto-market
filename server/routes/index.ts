@@ -6,9 +6,13 @@ import { userRoutes } from './userRoutes'
 
 export const router = express.Router()
 
+router.get("/", (req, res) => {
+  res.json({"message":"crypto-watch API"})
+});
+
 router.use('/auth',authRoutes)
 router.use('/fetch',fetchDataRoutes)
-router.use(userRoutes)
+router.use('/user',userRoutes)
 router.use(userConfigRoutes)
 
 

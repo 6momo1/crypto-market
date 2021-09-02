@@ -35,7 +35,7 @@ app.use(
 );
 
 // cors middleware
-app.use(cors({origin: "http://localhost:3000", credentials: true}));
+app.use(cors({origin: process.env.REACT_APP_CLIENT_DOMAIN, credentials: true}));
 app.use(express.json()); 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,15 +49,5 @@ app.use(passport.session());
 //   console.log("new User Login");
 //   res.json(req.user)
 // })
-
-
-app.get("/", (req, res) => {
-  res.json({"message":"crypto-watch API"})
-});
-
-app.get('/logout', (req, res) => {
-  req.logout()
-})
-
 // routes
 app.use('/api',router);
