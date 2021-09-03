@@ -6,6 +6,7 @@ import { useFetchTokenDatas } from "../../hooks/tokenData/useFetchTokenDatas";
 import { useFethTokenPrices } from "../../hooks/tokenData/useFetchTokenPrices";
 import { isEmptyObject } from "../../utils";
 import { useFethTokenCharts } from "../../hooks/tokenData/useChartData";
+import Chart from "../../components/Chart";
 
 interface TokenParams {
   id: string;
@@ -32,20 +33,20 @@ const Token = () => {
   const {
     chartData,
     error: chartError,
-    loading: chartLoading
-  } = useFethTokenCharts(id)
+    loading: chartLoading,
+  } = useFethTokenCharts(id);
 
   useEffect(() => {
-    console.log("chartData",chartData);
-  }, [chartData])
+    console.log("chartData", chartData);
+  }, [chartData]);
 
   useEffect(() => {
     console.log("tokenInfo", tokenInfo);
-  }, [tokenInfo])
+  }, [tokenInfo]);
 
   useEffect(() => {
     console.log("prices", prices);
-  }, [prices])
+  }, [prices]);
 
   useEffect(() => {
     if (!priceError || !tokenDataError) {
@@ -66,6 +67,7 @@ const Token = () => {
       <div>
         <h1>Token Page for address: {id}</h1>
         <p>data: {JSON.stringify(tokenInfo)}</p>
+        <Chart/>
       </div>
     );
   }
