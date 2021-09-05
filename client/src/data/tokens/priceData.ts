@@ -9,7 +9,7 @@ import { ONE_HOUR_SECONDS, TimeWindow } from '../../constants/intervals'
  * Formatted type for Candlestick charts
  */
 export type PriceChartEntry = {
-  time: number // unix timestamp
+  time: any, // unix timestamp
   open: number
   close: number
   high: number

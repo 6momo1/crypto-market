@@ -7,6 +7,7 @@ import { useFethTokenPrices } from "../../hooks/tokenData/useFetchTokenPrices";
 import { isEmptyObject } from "../../utils";
 import { useFethTokenCharts } from "../../hooks/tokenData/useChartData";
 import Chart from "../../components/Chart";
+import { unixToDate } from "../../utils/unixDateConversion";
 
 interface TokenParams {
   id: string;
@@ -37,15 +38,15 @@ const Token = () => {
   } = useFethTokenCharts(id);
 
   useEffect(() => {
-    console.log("chartData", chartData);
+    // console.log("chartData", chartData);
   }, [chartData]);
 
   useEffect(() => {
-    console.log("tokenInfo", tokenInfo);
+    // console.log("tokenInfo", tokenInfo);
   }, [tokenInfo]);
 
   useEffect(() => {
-    console.log("prices", prices);
+    // console.log("prices", prices);
   }, [prices]);
 
   useEffect(() => {
@@ -62,23 +63,23 @@ const Token = () => {
     }
   }, [priceLoading, tokenDataLoading]);
 
-  if (!isEmptyObject(tokenInfo)) {
-    return (
+  // if (!isEmptyObject(tokenInfo)) {
+  //   return (
+  //     <div>
+  //       <h1>Token Page for address: {id}</h1>
+  //       <p>data: {JSON.stringify(tokenInfo)}</p>
+  //       <Chart address={id}/>
+  //     </div>
+  //   );
+  // }
+
+  return (
       <div>
         <h1>Token Page for address: {id}</h1>
         <p>data: {JSON.stringify(tokenInfo)}</p>
-        <Chart/>
+        <Chart address={id}/>
       </div>
     );
-  }
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) return <Error message="Invalid token address" />;
-
-  return <></>;
 };
 
 export default Token;

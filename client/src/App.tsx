@@ -53,9 +53,6 @@ function App() {
               <Route exact path="/token/:id">
                 <Token />
               </Route>
-              <Route exact path="/test">
-                <Chart/>
-              </Route>
               <Route path="*">
                 <Error />
               </Route>

@@ -2,8 +2,8 @@ node_modules/
 yarn-error.log/
 .env
 /notes
-/server/**/*.js
 
+/server/**/*.js
 /server/apollo/**/*.js 
 /server/assets/**/*.js
 /server/constants/**/*.js

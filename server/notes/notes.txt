@@ -4,7 +4,11 @@
 
 activate watch mode
 npx tsc -w
+ 
 
+ momentum and trend analysis
+
+ 
 questions:
 how do I correctly manage users?
   should I restructure my database?
