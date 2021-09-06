@@ -12,7 +12,6 @@ import LoginSuccess from './components/LoginSuccess';
 import { fetchAuthUser } from './utils/fetchAuthUser';
 import { useDispatch } from "react-redux";
 import { setAuthUser, setIsAuthenticated } from './app/appSlice';
-import Chart from './components/Chart';
 
 function App() {
 

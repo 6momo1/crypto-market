@@ -4,10 +4,10 @@ import { fetchTokenDatas, TokenFields } from "../../data/tokens/tokenData";
 
 export const useFetchTokenDatas = (addresses: string[]) => {
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<
     { [address: string]: TokenFields } | undefined
   >(undefined);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchTokenDatas(addresses, client)

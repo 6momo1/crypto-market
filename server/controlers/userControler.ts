@@ -4,7 +4,6 @@ import { UserInterface } from '../models/users'
 import { useFetchTokenDatas } from '../data/tokens/tokenData'
 import { useFetchTokenPriceData } from '../data/tokens/priceData'
 import { client } from '../apollo'
-import { userRoutes } from '../routes/userConfigRoutes'
 
 /*
   http request body must have:
@@ -30,7 +29,7 @@ export const user_create = ( req, res ) => {
 // helper function to update users token watchlist
 async function update_user_token_watchlist( req, res ) {
 
-  await User.findOne({_id:req.body.userId})
+  await User.findOne({googleId :req.body.userId})
     .then( user => {
 
       // update user token watchlist if user is already subscribed to the token
@@ -138,7 +137,7 @@ async function add_user_to_token_subscribers (req, res ) {
 /*
   http request body must have:
     userId,
-    tokneSymbol,
+    tokenSymbol,
     tokenAddress,
     above? or below?
     watchPrice
@@ -146,6 +145,9 @@ async function add_user_to_token_subscribers (req, res ) {
 export const user_subscribe_to_new_token = async ( req, res ) => {
   await update_user_token_watchlist( req, res )
   await add_user_to_token_subscribers( req, res )
+  const user = await User.find({googleId: req.body.userId})
+  res.json(user)
+  console.log(req.body);
 }
 
 // endpoint for deleting user by id

@@ -1,4 +1,5 @@
 import express from 'express'
+import { user_subscribe_to_new_token } from '../controlers/userControler'
 import { ensureAdmin, ensureAuth } from '../middleware/auth'
 import { User } from '../models/users'
 
@@ -19,4 +20,9 @@ userRoutes.get('/get_users', ensureAdmin, async (req, res) => {
   const users = await User.find({})
   res.json({data: users})
   
+})
+
+userRoutes.get('/get_watchlists', async (req, res) => {
+  const googleId = req.body.googleId
+
 })

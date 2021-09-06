@@ -13,6 +13,4 @@ router.get("/", (req, res) => {
 router.use('/auth',authRoutes)
 router.use('/fetch',fetchDataRoutes)
 router.use('/user',userRoutes)
-router.use(userConfigRoutes)
-
-
+router.use('/user_settings',userConfigRoutes)

@@ -8,7 +8,14 @@ npx tsc -w
 
  momentum and trend analysis
 
- 
+chart data changed from 
+  // const startTimestamp = 1619170975;
+to current time utc
+and from date to period start unix
+
+sudden volume spikes
+
+
 questions:
 how do I correctly manage users?
   should I restructure my database?

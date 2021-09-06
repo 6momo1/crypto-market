@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
 import { client } from "../../apollo";
-import { fetchTokenChartData, TokenChartEntry } from "../../data/tokens/chartData";
+import { fetchTokenVolumeData  } from "../../data/tokens/chartData";
 import { PriceChartEntry } from "../../data/tokens/priceData";
 
-export const useFethTokenCharts = (address: string) => {
+interface VolumeData {
+  date: number;
+    volumeUSD: string;
+    totalValueLockedUSD: string
+}
+
+export const useFetchTokenVolume = (address: string) => {
   const [error, setError] = useState(false);
-
   const [loading, setLoading] = useState(true);
-
-  const [chartData, setChartData] = useState<
-    {[date: number]: TokenChartEntry}
-    | undefined
+  const [chartData, setChartData] = useState< VolumeData[] | undefined
   >(undefined);
 
   useEffect(() => {
-    fetchTokenChartData(address, client)
+    fetchTokenVolumeData(address, client)
       .then(res => {
         setChartData(res.data)
         setLoading(false)

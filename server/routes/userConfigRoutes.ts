@@ -3,7 +3,7 @@ import * as usersControler from '../controlers/userControler'
 
 export const userConfigRoutes = express.Router()
 
-userConfigRoutes.post( "/user_subscribe_to_new_token", usersControler.user_subscribe_to_new_token )
+userConfigRoutes.put( "/user_subscribe_to_new_token", usersControler.user_subscribe_to_new_token )
 userConfigRoutes.delete( "/user_unsubscribe_to_token", usersControler.user_unsubscribe_to_token )
 userConfigRoutes.delete( "/user_remove_token_price_alert", usersControler.user_remove_token_price_alert )
 userConfigRoutes.delete( "/user_remove_token_price_alert", usersControler.user_remove_token_price_alert )

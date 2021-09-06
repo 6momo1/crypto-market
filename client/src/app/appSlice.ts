@@ -1,8 +1,34 @@
 import {createSlice } from "@reduxjs/toolkit"
 import { fetchAuthUser } from '../utils/fetchAuthUser'
+
+export interface TokenWatchlistInterface {
+  tokenSymbol: string,
+  tokenAddress: string,
+  priceAlerts: {
+    above?: number[],
+    below?: number[]
+  }
+}
+
+
+export interface UserInterface {
+  googleId: string,
+  displayName: string,
+  firstName: string,
+  lastName: string,
+  notifyBy: {
+    email: string,
+    telegram: string
+  },
+  email: string,
+  telegram: string,
+  tokenWatchlist: TokenWatchlistInterface[],
+  member: boolean
+}
+
 interface IAppState {
   isAuthenticated: boolean,
-  authUser: any | null
+  authUser: UserInterface | null
 }
 
 const initialState: IAppState = {

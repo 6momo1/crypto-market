@@ -5,7 +5,7 @@ import {
   PriceChartEntry,
 } from "../../data/tokens/priceData";
 
-export const useFethTokenPrices = (address: string) => {
+export const useFetchTokenPrices = (address: string) => {
   const [error, setError] = useState(false);
   const [prices, setPrices] = useState<PriceChartEntry[] | undefined>(
     undefined

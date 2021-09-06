@@ -4,10 +4,10 @@ import utc from "dayjs/plugin/utc";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import gql from "graphql-tag";
 
-export interface TokenChartEntry {
+export interface TokenVolumeEntry {
   date: number;
-  volumeUSD: number;
-  totalValueLockedUSD: number;
+  volumeUSD: string;
+  totalValueLockedUSD: string;
 }
 
 // format dayjs with the libraries that we need
@@ -40,7 +40,7 @@ interface ChartResults {
   }[];
 }
 
-export async function fetchTokenChartData(
+export async function fetchTokenVolumeData(
   address: string,
   client: ApolloClient<NormalizedCacheObject>
 ) {
@@ -87,12 +87,12 @@ export async function fetchTokenChartData(
 
   if (data) {
     const formattedExisting = data.reduce(
-      (accum: { [date: number]: TokenChartEntry }, dayData) => {
+      (accum: { [date: number]: TokenVolumeEntry }, dayData) => {
         const roundedDate = parseInt((dayData.date / ONE_DAY_UNIX).toFixed(0));
         accum[roundedDate] = {
           date: dayData.date,
-          volumeUSD: parseFloat(dayData.volumeUSD),
-          totalValueLockedUSD: parseFloat(dayData.totalValueLockedUSD),
+          volumeUSD: (dayData.volumeUSD),
+          totalValueLockedUSD: (dayData.totalValueLockedUSD),
         };
         return accum;
       },
@@ -113,7 +113,7 @@ export async function fetchTokenChartData(
       ) {
         formattedExisting[currentDayIndex] = {
           date: nextDay,
-          volumeUSD: 0,
+          volumeUSD: "0",
           totalValueLockedUSD: latestTvl,
         };
       } else {

@@ -2,7 +2,7 @@
   "clients": {
       "Bill": {
             "tokenWatchlist": [
-                "WETH": {
+                {"WETH": {
                     "priceAlerts": {
                         "above": [
                             3000.00,
@@ -12,7 +12,7 @@
                             2900.00
                         ]
                     }
-                }
+                }}
             ],
             "notifyBy": {
                 "email": true,

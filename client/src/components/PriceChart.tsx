@@ -3,32 +3,26 @@ import {
   BarData,
   createChart,
   CrosshairMode,
+  HistogramData,
+  isUTCTimestamp,
+  UTCTimestamp,
   WhitespaceData,
 } from "lightweight-charts";
-import { volumeData } from "../data/mockData/volumeData";
-import { priceData } from "../data/mockData/priceData";
-import { useFethTokenPrices } from "../hooks/tokenData/useFetchTokenPrices";
-import { useFethTokenCharts } from "../hooks/tokenData/useChartData";
-import { unixToDate } from "../utils/unixDateConversion";
+import { useFetchTokenPrices } from "../hooks/tokenData/useFetchTokenPrices";
+import { useFetchTokenVolume } from "../hooks/tokenData/useFetchTokenVolume";
 
 interface ChartProps {
   address: string;
 }
 
-const Chart: React.FC<ChartProps> = ({ address }) => {
+const PriceChart: React.FC<ChartProps> = ({ address }) => {
   const ref = React.useRef<any>();
 
   const {
     prices,
     error: priceError,
     loading: priceLoading,
-  } = useFethTokenPrices(address);
-
-  const {
-    chartData,
-    error: chartError,
-    loading: chartLoading,
-  } = useFethTokenCharts(address);
+  } = useFetchTokenPrices(address);
 
   useEffect(() => {
     const chart = createChart(ref.current, {
@@ -57,6 +51,8 @@ const Chart: React.FC<ChartProps> = ({ address }) => {
       },
     });
     if (prices) {
+
+      // initiate candle series
       var candleSeries = chart.addCandlestickSeries({
         upColor: "rgba(255, 144, 0, 1)",
         downColor: "#000",
@@ -65,10 +61,11 @@ const Chart: React.FC<ChartProps> = ({ address }) => {
         wickDownColor: "rgba(255, 144, 0, 1)",
         wickUpColor: "rgba(255, 144, 0, 1)",
       });
-
+      // format token prices to fit candle series
       let formattedChartPrices: BarData[] = [];
       prices?.forEach((priceObj) => {
-        const time = unixToDate(priceObj.time);
+        // const time = unixToDate(priceObj.time);
+        const time = priceObj.time as UTCTimestamp
         const open = priceObj.open;
         const close = priceObj.close;
         const high = priceObj.high;
@@ -82,43 +79,10 @@ const Chart: React.FC<ChartProps> = ({ address }) => {
           close,
         });
       });
-      console.log("formatted: ", formattedChartPrices);
-      console.log(formattedChartPrices[0]);
-
       if (formattedChartPrices && formattedChartPrices[0]) {
-
-        candleSeries.setData([formattedChartPrices[0], formattedChartPrices[1]]);
-
+        candleSeries.setData(formattedChartPrices);
       }
 
-      // const lineSeries = chart.addLineSeries();
-
-      // lineSeries.setData([
-      //   { time: "2019-04-11", value: 80.01 },
-      //   { time: "2019-04-12", value: 96.63 },
-      //   { time: "2019-04-13", value: 76.64 },
-      //   { time: "2019-04-14", value: 81.89 },
-      //   { time: "2019-04-15", value: 74.43 },
-      //   { time: "2019-04-16", value: 80.01 },
-      //   { time: "2019-04-17", value: 96.63 },
-      //   { time: "2019-04-18", value: 76.64 },
-      //   { time: "2019-04-19", value: 81.89 },
-      //   { time: "2019-04-20", value: 74.43 },
-      // ]);
-
-      // var volumeSeries = chart.addHistogramSeries({
-      //   color: "#26a69a",
-      //   priceFormat: {
-      //     type: "volume",
-      //   },
-      //   priceScaleId: "",
-      //   scaleMargins: {
-      //     top: 0.8,
-      //     bottom: 0,
-      //   },
-      // });
-
-      // volumeSeries.setData(volumeData);
     }
 
     return () => {
@@ -133,4 +97,4 @@ const Chart: React.FC<ChartProps> = ({ address }) => {
   );
 };
 
-export default Chart;
+export default PriceChart;
