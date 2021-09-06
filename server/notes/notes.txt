@@ -1,27 +1,25 @@
 // json rpc
 // es6 vs node
 
-
-activate watch mode
-npx tsc -w
- 
+server: 
 crate a log file
 
+strategies:
+sudden volume spikes
  momentum and trend analysis
 
-chart data changed from 
-  // const startTimestamp = 1619170975;
-to current time utc
-and from date to period start unix
+watchlistForm component:
+notify that alert has been added
+do not allow users to submit the same price target
 
-sudden volume spikes
+watclistTable component:
+link to token
+delete
 
+dashboard Page:
+dashboard must be updated for token watchlist to show up after adding a watchlist 
 
 questions:
-how do I correctly manage users?
-  should I restructure my database?
-  is my database schema too complicated?
-
 google account linking, middleware for routes, authentication resources, such as opensource, socket to fetch data,
 // add validation, single lenght, etc...
 // validator library

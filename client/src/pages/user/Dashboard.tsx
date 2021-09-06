@@ -6,6 +6,7 @@ import Error from "../../components/Error";
 import { GoogleLoginButton } from "../../components/GoogleLoginButton";
 import Loader from "../../components/Loader";
 import Logout from "../../components/Logout";
+import WatchlistTable from "../../components/WatchlistTable";
 
 const Dashboard = () => {
   const authUser: UserInterface = useSelector(
@@ -20,51 +21,12 @@ const Dashboard = () => {
     console.log("user detail", authUser);
     console.log("user email: ");
     if (authUser && isAuthenticated) {
-      formatWatchlistTable();
-      console.log("flattened table row data", tableRows);
     }
   }, [authUser, isAuthenticated]);
 
-  interface WatchlistTableRowInterface {
-    price: number;
-    address: string;
-    symbol: string;
-    type: string;
-  }
 
-  const [tableRows, setTableRows] = useState<
-    WatchlistTableRowInterface[] | undefined | any
-  >([
-  ]);
 
-  const formatWatchlistTable = () => {
-    authUser.tokenWatchlist.forEach((priceObj) => {
 
-      priceObj.priceAlerts.above?.forEach((price) => {
-        setTableRows((tableRows: WatchlistTableRowInterface[]) => [
-          ...tableRows,
-          {
-            type: "above",
-            price,
-            address: priceObj.tokenAddress,
-            symbol: priceObj.tokenSymbol,
-          },
-        ]);
-      });
-      priceObj.priceAlerts.below?.forEach((price) => {
-        setTableRows((tableRows: WatchlistTableRowInterface[]) =>[
-          ...tableRows,
-          {
-            type: "below",
-            price,
-            address: priceObj.tokenAddress,
-            symbol: priceObj.tokenSymbol,
-          },
-        ]);
-      });
-    });
-  };
-  
   const user = () => {
     return (
       <div>
@@ -72,26 +34,7 @@ const Dashboard = () => {
         <h3>hello {authUser.firstName}</h3>
         <div>
           watchlists:
-          {JSON.stringify(authUser.tokenWatchlist)}
-          <table>
-            <thead>
-              <tr>
-                <th>Symbol</th>
-                <th>Type</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tableRows &&
-                tableRows.map((item: WatchlistTableRowInterface) => {
-                  return (<tr>
-                    <td>{item.symbol}</td>
-                    <td>{item.type}</td>
-                    <td>{item.price}</td>
-                  </tr>);
-                })}
-            </tbody>
-          </table>
+          {authUser && <WatchlistTable authUser={authUser}/>}
           <br />
           email:
           {authUser.email}

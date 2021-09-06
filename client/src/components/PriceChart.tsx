@@ -9,7 +9,6 @@ import {
   WhitespaceData,
 } from "lightweight-charts";
 import { useFetchTokenPrices } from "../hooks/tokenData/useFetchTokenPrices";
-import { useFetchTokenVolume } from "../hooks/tokenData/useFetchTokenVolume";
 
 interface ChartProps {
   address: string;

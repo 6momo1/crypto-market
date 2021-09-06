@@ -8,6 +8,7 @@ import VolumeChart from "../../components/VolumeChart";
 import { UserInterface } from "../../app/appSlice";
 import { useSelector } from "react-redux";
 import WatchListForm from "../../components/WatchListForm";
+import TokenSummary from "../../components/TokenSummary";
 
 interface TokenParams {
   id: string;
@@ -39,14 +40,17 @@ const Token = () => {
 
   return (
     <div>
-      <h1>Token Page for address: {id}</h1>
-      <p>data: {JSON.stringify(tokenInfo ? tokenInfo : "")}</p>
+      <h1>Data for: {tokenInfo![id].name}</h1>
+      {tokenInfo && (
+        <TokenSummary tokenInfo={tokenInfo ? tokenInfo[id] : undefined} />
+      )}
       Add a price alert for {tokenInfo![id].symbol}:
       <WatchListForm
         address={id}
         tokenInfo={tokenInfo![id]}
-        userGoogleId={authUser.googleId}
+        userGoogleId={authUser ? authUser.googleId : undefined}
       />
+      <br/>
       <PriceChart address={id} />
       <VolumeChart address={id} />
     </div>

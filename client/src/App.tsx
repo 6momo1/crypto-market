@@ -21,6 +21,7 @@ export default function App() {
     (state: any) => state.app.isAuthenticated
   );
 
+  // confirm if user is logged in when page renders
   const ensureUserLoggedIn = async () => {
     if (!authenticated){
       try {
@@ -44,6 +45,7 @@ export default function App() {
   return (
       <Router>
         <div className="App">
+            <Navbar/>
           <div className="content">
             <Switch>
               <Route exact path="/login/success/" component={LoginSuccess} />
