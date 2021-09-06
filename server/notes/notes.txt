@@ -5,6 +5,7 @@
 activate watch mode
 npx tsc -w
  
+crate a log file
 
  momentum and trend analysis
 

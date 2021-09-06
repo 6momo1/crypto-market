@@ -10,28 +10,36 @@ import Token from './pages/token/TokenPage';
 import Error from './pages/error/Error';
 import LoginSuccess from './components/LoginSuccess';
 import { fetchAuthUser } from './utils/fetchAuthUser';
-import { useDispatch } from "react-redux";
-import { setAuthUser, setIsAuthenticated } from './app/appSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { setAuthUser, setIsAuthenticated, UserInterface } from './app/appSlice';
 
-function App() {
+export default function App() {
 
   const dispatch = useDispatch()
 
+  const authenticated: boolean = useSelector(
+    (state: any) => state.app.isAuthenticated
+  );
+
   const ensureUserLoggedIn = async () => {
-    const response = await fetchAuthUser()
-      .catch(e => console.log(e))
-      
-    console.log(response);
-    
-    if (response) {
-      dispatch(setIsAuthenticated(true))
-      dispatch(setAuthUser(response.data))
+    if (!authenticated){
+      try {
+        const response = await fetchAuthUser()
+        .catch(e => console.log(e))
+        console.log( "ensure user logged in at app.tsx", response);
+        if (response) {
+          dispatch(setAuthUser(response.data))
+          dispatch(setIsAuthenticated(true))
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
   useEffect(() => {
     ensureUserLoggedIn()
-  }, [])
+  }, [authenticated])
 
   return (
       <Router>
@@ -39,7 +47,6 @@ function App() {
           <div className="content">
             <Switch>
               <Route exact path="/login/success/" component={LoginSuccess} />
-              {/* <Navbar/> */}
               <Route exact path="/">
                 <Home/>
               </Route>
@@ -61,5 +68,3 @@ function App() {
       </Router>
   );
 }
-
-export default App;

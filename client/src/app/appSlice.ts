@@ -28,7 +28,7 @@ export interface UserInterface {
 
 interface IAppState {
   isAuthenticated: boolean,
-  authUser: UserInterface | null
+  authUser: UserInterface | null |undefined
 }
 
 const initialState: IAppState = {

@@ -34,8 +34,6 @@ const handleSubmitPriceAlert = async (e: any) => {
     const watchPrice = submitAboveCheck? alertAbove : alertBelow
 
     if (!watchPrice) {
-      // setAlertAbove(null)
-      // setAlertBelow(null)
       e.target.form.reset()
       console.log(alertAbove);
       
@@ -86,6 +84,7 @@ const handleSubmitPriceAlert = async (e: any) => {
           onChange={(e) => {
             setAlertAbove(parseInt(e.target.value));
           }}
+          placeholder="Above a given price"
         />
         <br />
         Or
@@ -101,6 +100,7 @@ const handleSubmitPriceAlert = async (e: any) => {
           name="below"
           id="below"
           disabled={submitAboveCheck}
+          placeholder="Below a given price"
           onChange={(e) => {
             setAlertAbove(parseInt(e.target.value));
           }}
