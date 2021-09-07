@@ -44,6 +44,7 @@ const Token = () => {
       {tokenInfo && (
         <TokenSummary tokenInfo={tokenInfo ? tokenInfo[id] : undefined} />
       )}
+      <br/>
       Add a price alert for {tokenInfo![id].symbol}:
       <WatchListForm
         address={id}

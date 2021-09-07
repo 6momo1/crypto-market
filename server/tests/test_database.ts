@@ -2,7 +2,6 @@ import { useFetchTokenPriceData } from "../data/tokens/priceData";
 import { sendPriceAlertToAllUsers } from "../utils/tokenAlerts";
 import * as tokenAlerts_json from "../mock_database/tokenAlerts.json"
 import mongoose from 'mongoose'
-import { Client } from '../models/users'
 
 require('dotenv').config({path:__dirname+'/./../../.env'})
 

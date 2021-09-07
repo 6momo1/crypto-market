@@ -1,0 +1,48 @@
+// json rpc
+// es6 vs node
+
+Home Page:
+  -display login button if user is not logged in
+  *Search For Token component:
+
+
+Token Page: 
+  error handling for loading vs error for invalid token addresses
+  *watchlistForm component:
+    -notify that alert has been added
+    -do not allow users to submit the same price target
+
+admin Page:
+  -admin user authentication, allow delete users and stuff
+
+dashboard Page:
+  -dashboard must be updated for token watchlist to show up after adding a watchlist 
+  *watclistTable component:
+    -link to token
+    -delete
+
+Error Page:
+
+
+
+strategies:
+sudden volume spikes
+ momentum and trend analysis
+
+questions:
+google account linking, middleware for routes, authentication resources, such as opensource, socket to fetch data,
+// add validation, single lenght, etc...
+// validator library
+
+middle ware for authentication:
+
+*login page, and authentication
+
+use sockets to fetch prices
+
+How can I deploy it?
+serverless or server?
+problems with scalability?
+
+server: 
+crate a log file

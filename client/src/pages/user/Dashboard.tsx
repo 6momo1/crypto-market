@@ -24,8 +24,10 @@ const Dashboard = () => {
     }
   }, [authUser, isAuthenticated]);
 
-
-
+  const handleEdit = async (type: string) => {
+    let newUsername = prompt(`Please enter your new ${type}: `)
+    console.log(newUsername);
+  }
 
   const user = () => {
     return (
@@ -34,10 +36,16 @@ const Dashboard = () => {
         <h3>hello {authUser.firstName}</h3>
         <div>
           watchlists:
-          {authUser && <WatchlistTable authUser={authUser}/>}
+          {authUser && <WatchlistTable authUser={authUser} />}
+
           <br />
           email:
           {authUser.email}
+          <button onClick={() => handleEdit("email")}>Edit</button>
+          <br />
+          telegram:
+          {authUser.telegram}
+          <button onClick={() => handleEdit("telegram")}>Edit</button>
           <br />
           googleId:
           {authUser.googleId}
@@ -49,7 +57,13 @@ const Dashboard = () => {
 
   return (
     <div>
-      {isAuthenticated && authUser ? user() : <Error message="loading" />}
+      {isAuthenticated && authUser ? (
+        user()
+      ) : (
+        <Error message="Please Login First">
+          <GoogleLoginButton />
+        </Error>
+      )}
     </div>
   );
 };

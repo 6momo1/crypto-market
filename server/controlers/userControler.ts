@@ -184,7 +184,7 @@ export const user_delete = async ( req, res ) => {
 // allow user to unsubscribe to token
 export const user_unsubscribe_to_token = async ( req, res ) => {
 
-  const _id = req.query.id
+  const googleId = req.query.id
   const tokenAddress = req.query.tokenAddress
   
   // // remove user from all token alerts subscribers list
@@ -195,7 +195,7 @@ export const user_unsubscribe_to_token = async ( req, res ) => {
       return res.send(404)
     }
     console.log(tokenAlert);
-    const idx = tokenAlert.subscribers.indexOf(_id)
+    const idx = tokenAlert.subscribers.indexOf(googleId)
     if ( idx > -1 ) {
       tokenAlert.subscribers.splice(idx, 1)
       tokenAlert.save()
@@ -210,7 +210,7 @@ export const user_unsubscribe_to_token = async ( req, res ) => {
   }
 
   // remove token from users token watchlist
-  const user = await User.findById(_id)
+  const user = await User.findById(googleId)
   try {
     if ( !user ) {
       console.log("user not found")
@@ -238,27 +238,35 @@ export const user_unsubscribe_to_token = async ( req, res ) => {
 }
 
 // allow user to remove token price alerts
+/*
+  DELETE: {
+    googleId: string,
+    tokenaddress: string
+    above: boolean
+    below: boolean
+    price: number
+  }
+*/
 export const user_remove_token_price_alert = async ( req, res ) => {
 
-  const _id = req.query.id
-  const above = req.query.above
-  const below = req.query.below
-  const price = req.query.price
-  const tokenAddress = req.query.tokenAddress
+  const googleId = req.body.googleId
+  const above = req.body.above
+  const below = req.body.below
+  const price = req.body.price
+  const tokenAddress = req.body.tokenAddress
   
   if (!above && !below) {
-    res.json({"message":"no price limit or floor received"})
-    res.send(400)
+    res.send(400).json({"error":"no price limit or floor received"})
   }
 
-  const user = await User.findById(_id)
+  const user = await User.findOne({ googleId: googleId} )
   try {
     if ( !user ) {
       console.log("user not found")
-      return res.send(404)
+      return res.send(400).json({"error":"user not found"})
     } 
 
-    // tried to use filter but why does it not work?
+    // tried to use "filter" but why does it not work?
     let tokenInfoIdx = -1
     for (let i = 0; i < user.tokenWatchlist.length; i++) {
       const tokenInfo = user.tokenWatchlist[i];
@@ -274,6 +282,7 @@ export const user_remove_token_price_alert = async ( req, res ) => {
           userPriceAlerts.above.splice(priceIndex, 1)
           user.save()
           console.log(`Price alert of ${price} removed from token watchlist ${user.tokenWatchlist[tokenInfoIdx].tokenSymbol}`);
+          res.json(user)
         }
       }
       if (below) {
@@ -282,11 +291,12 @@ export const user_remove_token_price_alert = async ( req, res ) => {
           userPriceAlerts.below.splice(priceIndex, 1)
           user.save()
           console.log(`Price alert of ${price} removed from token watchlist ${user.tokenWatchlist[tokenInfoIdx].tokenSymbol}`);
+          res.json(user)
         }
       }
     } else {
       console.log(`User does not have a price alert of ${price} for the token.`);
-      res.send(400);
+      res.send(400).json({"error":"User does not have a price alert for requested "})
     }
 
   } catch(e) {

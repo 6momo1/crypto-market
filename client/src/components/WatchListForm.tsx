@@ -45,7 +45,7 @@ const WatchListForm: React.FC<WatchListFormProps> = ({
 
     if (!watchPrice) {
       e.target.form.reset();
-      console.log(alertAbove);
+      console.log(watchPrice);
 
       return alert("Please enter a valid price. ");
     }
@@ -70,9 +70,12 @@ const WatchListForm: React.FC<WatchListFormProps> = ({
 
     try {
       const data = await axios(config);
+      if (data.status == 200) {
+        alert("New price alert added.")
+      }
       e.target.form.reset();
-      console.log(data);
     } catch (error) {
+      alert("Error: something went wrong. Please try again in a bit.")
       e.target.form.reset();
       console.log(error);
     }
@@ -113,7 +116,7 @@ const WatchListForm: React.FC<WatchListFormProps> = ({
         disabled={submitAboveCheck}
         placeholder="Below a given price"
         onChange={(e) => {
-          setAlertAbove(parseInt(e.target.value));
+          setAlertBelow(parseInt(e.target.value));
         }}
       />
       <br />
