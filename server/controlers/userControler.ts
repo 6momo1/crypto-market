@@ -4,6 +4,7 @@ import { UserInterface } from '../models/users'
 import { useFetchTokenDatas } from '../data/tokens/tokenData'
 import { useFetchTokenPriceData } from '../data/tokens/priceData'
 import { client } from '../apollo'
+import { validateEmail } from '../utils/validateEmail'
 
 /*
   http request body must have:
@@ -256,14 +257,14 @@ export const user_remove_token_price_alert = async ( req, res ) => {
   const tokenAddress = req.body.tokenAddress
   
   if (!above && !below) {
-    res.send(400).json({"error":"no price limit or floor received"})
+    res.sendStatus(400).send({"error":"no price limit or floor received"})
   }
 
   const user = await User.findOne({ googleId: googleId} )
   try {
     if ( !user ) {
       console.log("user not found")
-      return res.send(400).json({"error":"user not found"})
+      return res.sendStatus(400).send({"error":"user not found"})
     } 
 
     // tried to use "filter" but why does it not work?
@@ -296,7 +297,7 @@ export const user_remove_token_price_alert = async ( req, res ) => {
       }
     } else {
       console.log(`User does not have a price alert of ${price} for the token.`);
-      res.send(400).json({"error":"User does not have a price alert for requested "})
+      res.sendStatus(400).send({"error":"User does not have a price alert for requested "})
     }
 
   } catch(e) {
@@ -305,76 +306,105 @@ export const user_remove_token_price_alert = async ( req, res ) => {
   }
 }
 
+// Allow user to edit their email account
+/**
+ * 
+ * @param req PUT: {
+ *  googleId: string,
+ *  email: string
+ * }
+ * @param res error message
+ */
 export const user_edit_email = async ( req, res ) => {
-  const _id = req.query.id
-  const email = req.query.email
+  const googleId = req.body.googleId
+  const email = req.body.email
 
   if (!email) {
-    res.json({"error":"No email received"})
-    res.send(400)
+    // res.send(400).send({"error":"No email received"})
+    res.sendStatus(400)
+    console.log({"error":"No email received"})
+    return
+  }
+
+  if (!validateEmail(email)) {
+    res.sendStatus(400)
+    console.log({"error":"Invalid email"})
+    return
   }
 
   try {
-    const user = await User.findById(_id)
+    const user = await User.findOne({googleId})
     user.email = email
     user.save()
-    console.log(`email changed to ${email} for user id: ${_id}`)
-    res.send(200)
+    console.log(`email changed to ${email} for user id: ${googleId}`)
+    res.json(user)
 
   } catch (e) {
     console.log(e)
-    res.send(400)
+    res.sendStatus(400)
   }
 }
 
+
+// Allow user to edit their telegram account
+/**
+ * 
+ * @param req PUT: {
+ *  googleId: string,
+ *  telegram: string
+ * }
+ * @param res error message
+ */
 export const user_edit_telegram = async (req, res ) => {
   
-  const _id = req.query.id
-  const telegram = req.query.telegram
+  const googleId = req.body.googleId
+  const telegram = req.body.telegram
 
   if (!telegram) {
-    res.json({"error":"No telegram username received"})
-    res.send(400)
+    console.log({"error":"No telegram username received"})
+    res.sendStatus(400)
+    return
   }
 
-  const user = await User.findById(_id)
+  const user = await User.findOne({googleId})
   try {
     user.telegram = telegram
     user.save()
-    console.log(`telegram username changed to ${telegram} for user id: ${_id}`)
-    res.send(200)
+    console.log(`telegram username changed to ${telegram} for user id: ${googleId}`)
+    res.json(user)
   } catch (e) {
     console.log(e)
-    res.send(400)
+    res.sendStatus(400)
+    console.log({"error":"something went wrong in the server"})
   }
 }
 
 export const user_edit_membership = async (req, res ) => {
   
-  const _id = req.query.id
-  const member = req.query.member
+  const googleId = req.body.googleId
+  const member = req.body.member
 
   if (!member) {
-    res.json({"error":"no member"})
+    res.json({"error":"no member status received"})
     res.send(400)
   }
 
-  const user = await User.findById(_id)
+  const user = await User.findOne({googleId})
   try {
     if (member == "true") {
       user.member = true
       user.save()
-      console.log(`User with id of ${_id} changed to membership to ${member}`)
-      res.send(200)
+      console.log(`User with id of ${googleId} changed to membership to ${member}`)
+      res.json(user)
     } 
     if (member == "false") {
       user.member = false
       user.save()
-      console.log(`User with id of ${_id} changed to membership to ${member}`)
-      res.send(200)
+      console.log(`User with id of ${googleId} changed to membership to ${member}`)
+      res.json(user)
     } 
   } catch (e) {
     console.log(e)
-    res.send(400)
+    res.sendStatus(400).send({"error":"something went wrong in the server"})
   }
 }
