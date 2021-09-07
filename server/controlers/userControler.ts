@@ -29,7 +29,7 @@ export const user_create = ( req, res ) => {
 
 // helper function to update users token watchlist
 async function update_user_token_watchlist( req, res ) {
-
+  
   await User.findOne({googleId :req.body.userId})
     .then( user => {
 
@@ -135,14 +135,19 @@ async function add_user_to_token_subscribers (req, res ) {
 
 }
 
-/*
-  http request body must have:
-    userId,
-    tokenSymbol,
-    tokenAddress,
-    above? or below?
-    watchPrice
-*/
+
+/**
+ * Allow user to user to subscribe to a new token 
+ * @param req POST {
+ *  googleId: string,
+ * tokenSymbol: string,
+ * tokenAddress: string,
+ * above: boolean,
+ * below: bolean,
+ * watchPrice: number
+ * }
+ * @param res Status code or User object
+ */
 export const user_subscribe_to_new_token = async ( req, res ) => {
   await update_user_token_watchlist( req, res )
   await add_user_to_token_subscribers( req, res )
@@ -152,9 +157,17 @@ export const user_subscribe_to_new_token = async ( req, res ) => {
 }
 
 // endpoint for deleting user by id
+/**
+ * 
+ * @param req DELETE {
+ *  googleId: string
+ * }
+ * @param res 
+ * @returns 
+ */
 export const user_delete = async ( req, res ) => {
 
-  const _id = req.params.id
+  const _id = req.body.id
   
   // remove user from all token alerts subscribers list
   TokenAlerts.find({})
@@ -183,10 +196,19 @@ export const user_delete = async ( req, res ) => {
 }
 
 // allow user to unsubscribe to token
+/**
+ * 
+ * @param req DELETE {
+ *  googleId: string,
+ *  tokenAddress: string,
+ * }
+ * @param res Status code or User object
+ * @returns Status code or User object
+ */
 export const user_unsubscribe_to_token = async ( req, res ) => {
 
-  const googleId = req.query.id
-  const tokenAddress = req.query.tokenAddress
+  const googleId = req.body.id
+  const tokenAddress = req.body.tokenAddress
   
   // // remove user from all token alerts subscribers list
   const tokenAlert = await TokenAlerts.findOne({tokenAddress: tokenAddress})
@@ -311,7 +333,7 @@ export const user_remove_token_price_alert = async ( req, res ) => {
  * 
  * @param req PUT: {
  *  googleId: string,
- *  email: string
+ *  email: string,
  * }
  * @param res error message
  */
@@ -379,6 +401,15 @@ export const user_edit_telegram = async (req, res ) => {
   }
 }
 
+// Edit user membership status
+/**
+ * 
+ * @param req PUT {
+ *  googleId: string,
+ *  member: boolean
+ * }
+ * @param res Status code 400 or User object
+ */
 export const user_edit_membership = async (req, res ) => {
   
   const googleId = req.body.googleId

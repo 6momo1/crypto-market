@@ -3,6 +3,15 @@ import { useFetchTokenDatas } from "../data/tokens/tokenData"
 import web3 from "web3"
 import { useFetchTokenPriceData } from "../data/tokens/priceData"
 
+
+/**
+ * 
+ * @param req GET: {
+ * address: string
+ * }
+ * @param res Prices
+ * @returns 
+ */
 export const tokenDatas = async ( req: any , res ) => {
 
     if (!req.body.addresses) {
@@ -31,6 +40,14 @@ export const tokenDatas = async ( req: any , res ) => {
     })
 }
 
+/**
+ * gets token price data
+ * @param req GET{
+ *  address: string
+ * }
+ * @param res returns token price data
+ * @returns 
+ */
 export const tokenPriceData = async (req: any, res ) => {
 
     if (!req.body.address) {
