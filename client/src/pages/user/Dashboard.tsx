@@ -109,6 +109,14 @@ const Dashboard = () => {
           {authUser.telegram}
           <button onClick={() => handleEdit("telegram")}>Edit</button>
           <br />
+          alert by:
+          <br />
+          email: {authUser.notifyBy.email.toString()},
+          <button onClick={e => handleToggleNotifyBy("email")}>toggle</button>
+          <br />
+          telegram: {authUser.notifyBy.telegram.toString()},
+          <button onClick={e => handleToggleNotifyBy("telegram")}>toggle</button>
+          <br />
           googleId:
           {authUser.googleId}
         </div>

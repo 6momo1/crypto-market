@@ -59,7 +59,7 @@ const WatchListForm: React.FC<WatchListFormProps> = ({
       method: "PUT" as Method,
       url,
       data: {
-        userId: userGoogleId,
+        googleId: userGoogleId,
         tokenAddress,
         tokenSymbol,
         above,
@@ -70,8 +70,12 @@ const WatchListForm: React.FC<WatchListFormProps> = ({
 
     try {
       const data = await axios(config);
-      if (data.status == 200) {
+      console.log(data);
+      
+      if (!data.data.error) {
         alert("New price alert added.")
+      } else {
+        alert("Error: something went wrong. Please try again in a bit.")
       }
       e.target.form.reset();
     } catch (error) {
