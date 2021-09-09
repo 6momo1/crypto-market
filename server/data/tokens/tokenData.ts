@@ -59,6 +59,7 @@ export const TOKENS_BULK = (block: number | undefined, tokens: string[]) => {
 
 interface TokenFields {
   id: string
+  priceUSD: number
   symbol: string
   name: string
   derivedETH: string
@@ -80,14 +81,15 @@ interface TokenDataResponse {
 /**
  * Fetch top addresses by volume
  */
-export async function useFetchTokenDatas(
+export async function fetchTokenDatas(
   tokenAddresses: string[],
-  client: ApolloClient<any>
+  client: ApolloClient<any>,
+  currentEthPrice: number
 ): 
 Promise<{
   data:
     | {
-        [address: string]: TokenData
+        [address: string]: TokenFields
       }
     | undefined
 }>
@@ -99,13 +101,15 @@ Promise<{
     data = res.data
   })
 
+  
   const parsed = data?.tokens
-    ? data.tokens.reduce((accum: { [address: string]: TokenFields }, poolData) => {
-        accum[poolData.id] = poolData
+    ? data.tokens.reduce((accum: { [address: string]: TokenFields }, address) => {
+        const priceUSD = address ? parseFloat(address.derivedETH) * currentEthPrice : 0
+        address.priceUSD = priceUSD
+        accum[address.id] = address
         return accum
       }, {})
     : {}
-
   
   return {
     data: parsed

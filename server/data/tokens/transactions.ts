@@ -31,9 +31,9 @@ export type Transaction = {
 }
 
 const GLOBAL_TRANSACTIONS = gql`
-  query transactions($address: Bytes!) {
+  query transactions($address: Bytes!, $transactionCount: Int!) {
     mintsAs0: mints(
-      first: 500
+      first: $transactionCount
       orderBy: timestamp
       orderDirection: desc
       where: { token0: $address }
@@ -61,7 +61,7 @@ const GLOBAL_TRANSACTIONS = gql`
       amountUSD
     }
     mintsAs1: mints(
-      first: 500
+      first: $transactionCount
       orderBy: timestamp
       orderDirection: desc
       where: { token0: $address }
@@ -89,7 +89,7 @@ const GLOBAL_TRANSACTIONS = gql`
       amountUSD
     }
     swapsAs0: swaps(
-      first: 500
+      first: $transactionCount
       orderBy: timestamp
       orderDirection: desc
       where: { token0: $address }
@@ -115,7 +115,7 @@ const GLOBAL_TRANSACTIONS = gql`
       amountUSD
     }
     swapsAs1: swaps(
-      first: 500
+      first: $transactionCount
       orderBy: timestamp
       orderDirection: desc
       where: { token1: $address }
@@ -141,7 +141,7 @@ const GLOBAL_TRANSACTIONS = gql`
       amountUSD
     }
     burnsAs0: burns(
-      first: 500
+      first: $transactionCount
       orderBy: timestamp
       orderDirection: desc
       where: { token0: $address }
@@ -167,7 +167,7 @@ const GLOBAL_TRANSACTIONS = gql`
       amountUSD
     }
     burnsAs1: burns(
-      first: 500
+      first: $transactionCount
       orderBy: timestamp
       orderDirection: desc
       where: { token1: $address }
@@ -320,13 +320,15 @@ interface TransactionResults {
 
 export async function fetchTokenTransactions(
   address: string,
-  client: ApolloClient<any>
+  client: ApolloClient<any>,
+  transactionCount: number
 ): Promise<{ data: Transaction[] | undefined; error: boolean; loading: boolean }> {
   try {
     const { data, errors, loading } = await client.query<TransactionResults>({
       query: GLOBAL_TRANSACTIONS,
       variables: {
         address: address,
+        transactionCount: transactionCount
       },
       fetchPolicy: 'cache-first',
     })

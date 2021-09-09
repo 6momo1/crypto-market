@@ -5,6 +5,11 @@ import passport from "passport";
 import { ensureGuest, ensureAuth } from './middleware/auth'
 import session from "express-session";
 import { router } from "./routes";
+import cron from 'node-cron'
+import { sendPriceAlertToAllUsers } from "./utils/tokenAlerts";
+import { fetchCurrentPriceData } from "./data/tokens/currentPriceData";
+import {fetchEthPrice} from './data/tokens/fetchEthPrices'
+import {detectPriceChangesForAllTokens} from './cron-jobs/sendPriceAlerts'
 
 require("dotenv").config({ path: __dirname + "/./../.env" });
 require("./config/passport")(passport);
@@ -40,14 +45,12 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-// define a route handler for the default home page
-// app.get("/",ensureGuest, (req, res) => {
-//   res.json({"message":"crypto-watch API"})
+
+// CRON JOBS:
+// cron.schedule('*/5 * * * * *', async () => {
+//   const currentEthPrice = await fetchEthPrice()
+//   console.log("\n\nrunning cron job")
+//   await detectPriceChangesForAllTokens(currentEthPrice)
 // });
 
-// app.get("/dashboard", ensureAuth, (req, res) => {
-//   console.log("new User Login");
-//   res.json(req.user)
-// })
-// routes
 app.use('/api',router);

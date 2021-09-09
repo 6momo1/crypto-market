@@ -1,20 +1,6 @@
-import { TokenAlerts } from '../../models/tokenAlerts'
+import { TokenAlertInterface, TokenAlerts } from '../../models/tokenAlerts'
 import { User, UserInterface } from '../../models/users'
 import { notifyByEmail, notifyByTelegram } from './notifyByServices'
-
-
-interface TokenFields {
-  id: string
-  symbol: string
-  name: string
-  derivedETH: string
-  volumeUSD: string
-  volume: string
-  feesUSD: string
-  txCount: string
-  totalValueLocked: string
-  totalValueLockedUSD: string
-}
 
 /*
     alert user if token price is either above or below the user's price target
@@ -80,7 +66,7 @@ function shouldAlertUser(
 export async function sendPriceAlertToAllUsers(
     price: number, 
     tokenAddress: string,
-    tokenData: TokenFields
+    tokenAlertObj: TokenAlertInterface
 ):
 Promise<{
     error: boolean,
@@ -93,8 +79,6 @@ Promise<{
     const alertsSentTo: {name:string, by: string}[] = []
     const alertsNotSentTo: string[] = []
     
-    
-    const tokenAlertObj = await TokenAlerts.findOne({tokenAddress})
     // check if token exists
     if (!tokenAlertObj) {
         return { 
@@ -130,11 +114,11 @@ Promise<{
         if (shouldAlert) {
             
             if ( clientInfo.notifyBy.email ) {
-                notifyByEmail(subscriber, clientInfo.email , tokenAddress, price)
+                notifyByEmail(clientInfo, tokenAlertObj, price)
                 alertsSentTo.push({name: subscriber, by: "email"})
             }
             if ( clientInfo.notifyBy.telegram ) {
-                notifyByTelegram(subscriber, clientInfo.telegram, tokenAddress, price)
+                notifyByTelegram(clientInfo, tokenAlertObj, price)
                 alertsSentTo.push({name: subscriber, by: "telegram"})
             }
 

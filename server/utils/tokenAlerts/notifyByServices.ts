@@ -1,18 +1,22 @@
+import { TokenAlertInterface } from "../../models/tokenAlerts";
+import { UserInterface } from "../../models/users";
 
-export function notifyByEmail(subscriber:string, email: string, tokenSymbol: string, price: number) {
-    console.log(
-        `NOTIFIYING: ${subscriber} 
-        by Email: ${email} 
-        for token: ${tokenSymbol} 
-        at price ${price}
-    `);
+export function notifyByEmail(
+    user: UserInterface,
+    tokenAlertObj: TokenAlertInterface,
+    price:number
+) {
+  console.log(
+    `NOTIFIYING: ${user.firstName} by email: ${user.email} for token: ${tokenAlertObj.tokenSymbol} at price ${price} `
+  );
 }
 
-export function notifyByTelegram(subscriber:string, username: string, tokenSymbol: string, price: number) {
-    console.log(
-        `NOTIFIYING: ${subscriber} 
-        by telegram username: ${username} 
-        for token: ${tokenSymbol} 
-        at price ${price}
-    `);
+export function notifyByTelegram(
+    user: UserInterface,
+    tokenAlertObj: TokenAlertInterface,
+    price:number
+) {
+  console.log(
+    `NOTIFIYING: ${user.firstName} by telegram: ${user.telegram} for token: ${tokenAlertObj.tokenSymbol} at price ${price}`
+  );
 }

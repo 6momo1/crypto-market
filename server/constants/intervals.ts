@@ -6,6 +6,7 @@
 import { OpUnitType } from 'dayjs'
 
 export const ONE_HOUR_SECONDS = 3600
+export const ONE_MINUTE_SECONDS = 60
 
 export const TimeWindow: {
   [key: string]: OpUnitType
