@@ -1,6 +1,7 @@
 import axios, { Method } from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { UserInterface } from "../app/appSlice";
 import { TokenFields } from "../data/tokens/tokenData";
 
@@ -17,13 +18,13 @@ const WatchListForm: React.FC<WatchListFormProps> = ({
 }) => {
   const [alertAbove, setAlertAbove] = useState<number | null>(null);
   const [alertBelow, setAlertBelow] = useState<number | null>(null);
-
   const [submitAboveCheck, setSubmitAboveCheck] = useState(true);
-
   const authenticated: boolean = useSelector(
     (state: any) => state.app.isAuthenticated
   );
 
+  const history = useHistory()
+  
   const handleSubmitPriceAlert = async (e: any) => {
     e.preventDefault();
     e.target.form.reset();
@@ -77,10 +78,13 @@ const WatchListForm: React.FC<WatchListFormProps> = ({
       } else {
         alert("Error: something went wrong. Please try again in a bit.")
       }
-      e.target.form.reset();
+      // e.target.form.reset();
+      history.go(0)
+
     } catch (error) {
       alert("Error: something went wrong. Please try again in a bit.")
-      e.target.form.reset();
+      // e.target.form.reset();
+      history.go(0)
       console.log(error);
     }
   };

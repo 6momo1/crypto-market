@@ -31,44 +31,44 @@ function shouldAlertUser(
 }
 {
     
-    // const pricesAbove = user.tokenWatchlist[tokenAddress].priceAlert.above
-    // const pricesBelow = user.tokenWatchlist[tokenAddress].priceAlert.below
+    const watchlistObjIdx = user.tokenWatchlist.findIndex( item => item.tokenAddress === tokenAddress)
 
-    console.log("user: ", user);
+    const pricesAbove = user.tokenWatchlist[watchlistObjIdx].priceAlerts.above
+    const pricesBelow = user.tokenWatchlist[watchlistObjIdx].priceAlerts.below
     
 
-    // // if user does not have any price targets, return
-    // if (!pricesAbove && !pricesBelow) {
-    //     return {
-    //         shouldAlert: false, 
-    //         error: true, 
-    //         message: "Token is not in " + subscriber + "'s watchlist."
-    //     }
-    // }
+    // if user does not have any price targets, return
+    if (!pricesAbove && !pricesBelow) {
+        return {
+            shouldAlert: false, 
+            error: true, 
+            message: "Token is not in " + user.googleId + "'s watchlist."
+        }
+    }
 
     // // if current price reaches above user's price target, alert
-    // for (let i = 0; i < pricesAbove.length; i++) {
-    //     let priceAbove = pricesAbove[i]
-    //     if (currentPrice >= priceAbove) {
-    //         return {
-    //             shouldAlert: true,
-    //             error: false,
-    //             message: "Should alert user."
-    //         }
-    //     }
-    // }
+    for (let i = 0; i < pricesAbove.length; i++) {
+        let priceAbove = pricesAbove[i]
+        if (currentPrice >= priceAbove) {
+            return {
+                shouldAlert: true,
+                error: false,
+                message: "Should alert user."
+            }
+        }
+    }
 
     // // if current price reaches below user's price target, alert
-    // for (let i = 0; i < pricesBelow.length; i++) {
-    //     let priceAbove = pricesBelow[i]
-    //     if (currentPrice >= priceAbove) {
-    //         return {
-    //             shouldAlert: true,
-    //             error: false,
-    //             message: "Should alert user."
-    //         }
-    //     }
-    // }
+    for (let i = 0; i < pricesBelow.length; i++) {
+        let priceAbove = pricesBelow[i]
+        if (currentPrice >= priceAbove) {
+            return {
+                shouldAlert: true,
+                error: false,
+                message: "Should alert user."
+            }
+        }
+    }
 
     return {
         shouldAlert: false,
@@ -129,18 +129,14 @@ Promise<{
         
         if (shouldAlert) {
             
-            const clientInfo = User.findOne({googleId:subscriber})
-
-            // if ( clientInfo.notifyBy.email ) {
-            //     notifyByEmail(subscriber, clientInfo.email , tokenAddress, price)
-            //     alertsSentTo.push({name: subscriber, by: "email"})
-            // }
-            // if ( clientInfo.notifyBy.telegram ) {
-            //     notifyByTelegram(subscriber, clientInfo.telegram, tokenAddress, price)
-            //     alertsSentTo.push({name: subscriber, by: "telegram"})
-            // }
-            console.log(clientInfo);
-            
+            if ( clientInfo.notifyBy.email ) {
+                notifyByEmail(subscriber, clientInfo.email , tokenAddress, price)
+                alertsSentTo.push({name: subscriber, by: "email"})
+            }
+            if ( clientInfo.notifyBy.telegram ) {
+                notifyByTelegram(subscriber, clientInfo.telegram, tokenAddress, price)
+                alertsSentTo.push({name: subscriber, by: "telegram"})
+            }
 
         } else {
             alertsNotSentTo.push(subscriber)

@@ -1,12 +1,8 @@
 import { User, TokenWatchlistInterface } from "../models/users";
-import { TokenAlertInterface, TokenAlerts } from "../models/tokenAlerts";
-import { UserInterface } from "../models/users";
 import { useFetchTokenDatas } from "../data/tokens/tokenData";
-import { useFetchTokenPriceData } from "../data/tokens/priceData";
 import { client } from "../apollo";
 import { validateEmail } from "../utils/validateEmail";
-import { removeArgumentsFromDocument } from "apollo-utilities";
-import { tokenDatas } from "./fetchDataControler";
+import { TokenAlerts } from "../models/tokenAlerts";
 
 /*
   http request body must have:
