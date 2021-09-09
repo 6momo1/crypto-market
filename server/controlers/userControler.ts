@@ -448,6 +448,87 @@ export const user_edit_telegram = async (req, res) => {
   }
 };
 
+// Allow user to toggle weather they want to be notfied by telegram
+/**
+ *
+ * @param req PUT: {
+ *  googleId: string,
+ *  notify: boolean
+ * }
+ * @param res error message
+ */
+export const user_toggle_telegram = async (req, res ) => {
+   const googleId = req.body.googleId;
+  const notify = req.body.notify;
+
+  if (!googleId) {
+    console.log("googleId received");
+    res.sendStatus(400);
+    return;
+  }
+  if (notify === undefined) {
+    console.log("notify received");
+    res.sendStatus(400);
+    return;
+  }
+
+  const user = await User.findOne({ googleId });
+  try {
+    user.notifyBy.telegram = notify;
+    user.save();
+    console.log(
+      `telegram toggled to ${notify} for user id: ${googleId}`
+    );
+    res.json(user);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    console.log(`ERROR: Failed to toggle telegram for user ${googleId}`);
+  }
+}
+
+
+// Allow user to toggle weather they want to be notfied by email
+/**
+ *
+ * @param req PUT: {
+ *  googleId: string,
+ *  notify: boolean
+ * }
+ * @param res error message
+ */
+export const user_toggle_email = async (req, res ) => {
+   const googleId = req.body.googleId;
+  const notify = req.body.notify;
+
+  if (!googleId) {
+    console.log("googleId not received");
+    res.sendStatus(400);
+    return;
+  }
+
+  if (notify === undefined) {
+    console.log("Notify not received")
+    res.sendStatus(400);
+    return;
+  }
+
+  const user = await User.findOne({ googleId });
+  try {
+    user.notifyBy.email = notify;
+    user.save();
+    console.log(
+      `email toggled to ${notify} for user id: ${googleId}`
+    );
+    res.json(user);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+    console.log(`ERROR: Failed to toggle email for user ${googleId}`);
+  }
+}
+
+
 // Edit user membership status
 /**
  *

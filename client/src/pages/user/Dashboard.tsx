@@ -39,7 +39,6 @@ const Dashboard = () => {
     }
 
     const apiDomain = process.env.REACT_APP_API_DOMAIN;
-
     const googleId = authUser.googleId;
 
     if (type == "email") {
@@ -92,6 +91,60 @@ const Dashboard = () => {
     }
   };
 
+  const handleToggleNotifyBy = async (type: string) => {
+
+    const apiDomain = process.env.REACT_APP_API_DOMAIN;
+    const googleId = authUser.googleId;
+    const notifyByEmail = !authUser.notifyBy.email
+    const notifyByTelegram = !authUser.notifyBy.telegram
+
+    if (type == "email") {
+      try {
+        const result = await axios({
+          method: "PUT" as Method,
+          url: apiDomain + "/api/user_settings/user_toggle_email",
+          headers: { "content-type": "application/json" },
+          data: {
+            googleId,
+            notify: notifyByEmail,
+          },
+        });
+        if (result.status == 200) {
+          alert("success")
+          history.go(0)
+          console.log(result);
+        } else {
+          alert("Failed to update. Please try again later.")
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    else if (type == "telegram") {
+      try {
+        const result = await axios({
+          method: "PUT" as Method,
+          url: apiDomain + "/api/user_settings/user_toggle_telegram",
+          headers: { "content-type": "application/json" },
+          data: {
+            googleId,
+            notify: notifyByTelegram,
+          },
+        });
+        if (result.status == 200) {
+          alert("success")
+          console.log(result);
+          history.go(0)
+        } else {
+          alert("Failed to update. Please try again later.")
+        }
+      } catch (e) {
+        console.log(e);
+        alert("Failed to update. Please try again later.")
+      }
+    }
+  }
+
   const user = () => {
     return (
       <div>
@@ -115,7 +168,7 @@ const Dashboard = () => {
           <button onClick={e => handleToggleNotifyBy("email")}>toggle</button>
           <br />
           telegram: {authUser.notifyBy.telegram.toString()},
-          <button onClick={e => handleToggleNotifyBy("telegram")}>toggle</button>
+          <button disabled onClick={e => handleToggleNotifyBy("telegram")}>toggle</button>
           <br />
           googleId:
           {authUser.googleId}
