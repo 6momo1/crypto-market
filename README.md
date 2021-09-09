@@ -26,3 +26,6 @@ News aggregation
 ###### Server:
   inside the server folder, run:
   `npx tsc -w` to compile .ts files into .js, then run `npm run devStart` to run the server.
+
+###### Client:
+  

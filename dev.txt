@@ -1,0 +1,8 @@
+C:\Users\tomi\github\crypto-market\server\build
+nodemon .\server.js
+
+C:\Users\tomi\github\crypto-market\server
+npx tsc --watch
+
+C:\Users\tomi\github\crypto-market\client
+yarn start

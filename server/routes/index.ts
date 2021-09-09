@@ -3,6 +3,7 @@ import { authRoutes } from './authRoutes'
 import { fetchDataRoutes } from './fetchDataRoutes'
 import { userConfigRoutes } from './userConfigRoutes'
 import { userRoutes } from './userRoutes'
+import {alertSubscriberRoutes } from './alertSubscriberRoutes'
 
 export const router = express.Router()
 
@@ -14,3 +15,4 @@ router.use('/auth',authRoutes)
 router.use('/fetch',fetchDataRoutes)
 router.use('/user',userRoutes)
 router.use('/user_settings',userConfigRoutes)
+router.use('/price_alert', alertSubscriberRoutes)

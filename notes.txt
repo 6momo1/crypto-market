@@ -20,6 +20,8 @@ dashboard Page:
   *watclistTable component:
     -link to token
     -delete
+  
+  - add an edit and save button for when user edits its user information, such as alert buy email, telegram
 
 Error Page:
 
@@ -46,3 +48,4 @@ problems with scalability?
 
 server: 
 crate a log file
+*** too many sessions cached
