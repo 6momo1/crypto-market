@@ -1,8 +1,9 @@
 import { User, TokenWatchlistInterface } from "../models/users";
-import { useFetchTokenDatas } from "../data/tokens/tokenData";
+import { fetchTokenDatas } from "../data/tokens/tokenData";
 import { client } from "../apollo";
 import { validateEmail } from "../utils/validateEmail";
 import { TokenAlerts } from "../models/tokenAlerts";
+import { fetchEthPrice } from "../data/tokens/fetchEthPrices";
 
 /*
   http request body must have:
@@ -113,7 +114,8 @@ async function add_user_to_token_subscribers(req, res): Promise<boolean> {
     // to its subscribers list
     if (!tokenAlertObj) {
       try {
-        const newTokenData = await useFetchTokenDatas([tokenAddress], client);
+        const currentEthPrice = await fetchEthPrice()
+        const newTokenData = await fetchTokenDatas([tokenAddress], client, currentEthPrice);
 
         // check if token address and token data is valid
         if (Object.keys(newTokenData.data).length == 0) {

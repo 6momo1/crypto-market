@@ -1,0 +1,25 @@
+
+
+// build image
+docker build -t node-server .
+
+// run image in cointainer
+docker run --env-file ./.env -p 5000:5000 -d --name node-server node-server-image
+
+// list all images
+docker image ls
+
+// remove container
+docker image rm node-server
+
+// look into image
+docker run -it node-server-image bash
+
+// kill container 
+docker rm node-app -f 
+
+// running containers
+docker ps -a
+
+// view container files
+docker exec -it node-server bash

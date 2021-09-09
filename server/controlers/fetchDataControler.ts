@@ -1,7 +1,8 @@
 import { client } from "../apollo"
-import { useFetchTokenDatas } from "../data/tokens/tokenData"
+import { fetchTokenDatas } from "../data/tokens/tokenData"
 import web3 from "web3"
 import { useFetchTokenPriceData } from "../data/tokens/priceData"
+import { fetchEthPrice } from "../data/tokens/fetchEthPrices"
 
 
 /**
@@ -18,6 +19,8 @@ export const tokenDatas = async ( req: any , res ) => {
         return res.send("ERROR: no address received")
     }
 
+    const currentEthPrice = await fetchEthPrice()
+
     // error handling for invalid arguments
     const validAdrs: string[] = []
     const invalidAdrs: string[] = []
@@ -30,7 +33,7 @@ export const tokenDatas = async ( req: any , res ) => {
     })
     
     // fetch token datas
-    await useFetchTokenDatas( validAdrs, client )
+    await fetchTokenDatas( validAdrs, client, currentEthPrice )
     .then( tokenDatas => {
         let result = { addresses: {valid: validAdrs, invalid: invalidAdrs} , tokenDatas }
         res.send(result)

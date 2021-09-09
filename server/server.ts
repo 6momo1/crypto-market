@@ -2,16 +2,14 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import passport from "passport";
-import { ensureGuest, ensureAuth } from './middleware/auth'
+// import { ensureGuest, ensureAuth } from './middleware/auth'
 import session from "express-session";
 import { router } from "./routes";
 import cron from 'node-cron'
-import { sendPriceAlertToAllUsers } from "./utils/tokenAlerts";
-import { fetchCurrentPriceData } from "./data/tokens/currentPriceData";
 import {fetchEthPrice} from './data/tokens/fetchEthPrices'
 import {detectPriceChangesForAllTokens} from './cron-jobs/sendPriceAlerts'
 
-require("dotenv").config({ path: __dirname + "/./../.env" });
+require('dotenv').config({path:__dirname+'/./../.env'});
 require("./config/passport")(passport);
 const MongoStore = require('connect-mongo')
 
@@ -47,10 +45,21 @@ app.use(passport.session());
 
 
 // CRON JOBS:
+
+// listen to price changes for all tokens
 // cron.schedule('*/5 * * * * *', async () => {
 //   const currentEthPrice = await fetchEthPrice()
 //   console.log("\n\nrunning cron job")
 //   await detectPriceChangesForAllTokens(currentEthPrice)
 // });
+
+// drop sessions every hour
+cron.schedule('* */1 * * *', async () => {
+  mongoose.connection.db.dropCollection('sessions')
+});
+
+app.get('/', (req, res) => {
+  res.send("Crypto Watch API")
+})
 
 app.use('/api',router);
