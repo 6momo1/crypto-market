@@ -14,18 +14,24 @@ The server will fetch token price datas via socket connection and alert users wh
 ### future implementation
 Develop an ERC-20 Token contract as a payment for CRYPTO-WATCH membership services.
 create a token analytics service such as:
-  Detect momentum change
-  trend detection
-  social media presence
+  Detect
+    - momentum change
+    - trend detection
+    - social media presence
   ...
 "Hot Tokens" featured
 News aggregation
+collect historical data, offer it as service
 
 
-### Developing
-###### Server:
-  inside the server folder, run:
-  `npx tsc -w` to compile .ts files into .js, then run `npm run devStart` to run the server.
+### Docker
+run `docker-compose up -d --build` to run the app
+`docker-compose down` to terminate the app
 
-###### Client:
-  
+###### How Docker builds the Server
+`./server/build` is a directory that consists of `.js` files compiled from the Typscript in the `./server` directory.
+
+NOTE:  Changes made to the source files must be first compiled to Javascript files, then rebuild the docker image.
+with `npx tsc --watch`, Typescript will automatically generate and compile `.js` files to the `./server/build` folder. 
+
+Docker will copy the `./server/build` folder to the docker image, `cd` into `/build`, run npm install, then run `node server.js`

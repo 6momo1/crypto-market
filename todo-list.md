@@ -25,3 +25,5 @@
 - [ ] allow users to edit their personal information
 
 - [ ] create an admin page to manage user settings
+
+- [ ] show swaps

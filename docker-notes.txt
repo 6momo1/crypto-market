@@ -1,0 +1,3 @@
+
+// run the docker-compose file to build server
+docker-compose up -d

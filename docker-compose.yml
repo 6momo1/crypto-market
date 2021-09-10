@@ -1,0 +1,8 @@
+version: "3"
+services:
+  node-server:
+    build: ./server/Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env

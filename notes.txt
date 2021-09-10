@@ -49,3 +49,7 @@ problems with scalability?
 server: 
 crate a log file
 *** too many sessions cached
+add subscription to graphql instead of web socketss
+create a linux cron job to delete sessions
+calculate price impact
+collect and sell price data
