@@ -2,4 +2,8 @@
 /notes
 yarn-error.log/
 node_modules/
-/server/build/*
+
+.vscode
+
+/server/notes/*
+/server/mock_database/*

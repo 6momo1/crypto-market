@@ -54,9 +54,13 @@ app.use(passport.session());
 // });
 
 // drop sessions every hour
-cron.schedule('* */1 * * *', async () => {
-  mongoose.connection.db.dropCollection('sessions')
-});
+// cron.schedule('* * */1 * *', async () => {
+//   try {
+    
+//   } catch (error) {
+//     console.log("could not delete collections from `session`.")
+//   }
+// });
 
 app.get('/', (req, res) => {
   res.send("Crypto Watch API")
