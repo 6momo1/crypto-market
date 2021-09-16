@@ -21,6 +21,7 @@ mongoose_1.default
     .connect(process.env.MONGO_URI)
     .then((result) => app.listen(5000, () => {
     console.log(`Server listening on port: ${PORT}`);
+    // console.log("process.env", process.env)
 }))
     .catch((err) => console.log(err));
 // user session

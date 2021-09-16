@@ -1,5 +1,4 @@
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import mongoose from "mongoose";
 import { User } from "../models/users";
 
 module.exports = function (passport) {
@@ -8,7 +7,7 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.REACT_APP_API_DOMAIN + "/api/auth/google/callback",
+        callbackURL: "/api/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
         const newUser = {

@@ -7,7 +7,7 @@ import session from "express-session";
 import { router } from "./routes";
 import cron from 'node-cron'
 import {fetchEthPrice} from './data/tokens/fetchEthPrices'
-import {detectPriceChangesForAllTokens} from './cron-jobs/sendPriceAlerts'
+import { detectPriceChangesForAllTokens } from './cron-jobs/sendPriceAlerts'
 
 require('dotenv').config({path:__dirname+'/./../.env'});
 require("./config/passport")(passport);
@@ -23,6 +23,7 @@ mongoose
   .then((result) =>
     app.listen(5000, () => {
       console.log(`Server listening on port: ${PORT}`);
+      // console.log("process.env", process.env)
     })
   )
   .catch((err) => console.log(err));
@@ -56,7 +57,7 @@ app.use(passport.session());
 // drop sessions every hour
 // cron.schedule('* * */1 * *', async () => {
 //   try {
-    
+
 //   } catch (error) {
 //     console.log("could not delete collections from `session`.")
 //   }

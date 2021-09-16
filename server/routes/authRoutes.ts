@@ -4,7 +4,7 @@ import passport from "passport";
 export const authRoutes = express.Router();
 
 const errorLoginUrl = process.env.REACT_APP_CLIENT_DOMAIN + '/error'
-const successLoginUrl = process.env.REACT_APP_CLIENT_DOMAIN + 'login/success'
+const successLoginUrl = process.env.REACT_APP_CLIENT_DOMAIN +'/login/success'
 
 // @desc Auth with Google
 // @route GET /auth/google
@@ -25,5 +25,19 @@ authRoutes.get(
   (req, res) => {
     res.json({user:req.user})
     console.log("User: ", req.user);
+  }
+);
+
+authRoutes.get(
+  "/login/success",
+  (req, res) => {
+    res.json({"success":true})
+  }
+);
+
+authRoutes.get(
+  "/login/success",
+  (req, res) => {
+    res.json({"success": false})
   }
 );
